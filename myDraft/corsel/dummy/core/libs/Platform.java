@@ -34,7 +34,7 @@ public class Platform {
 	/**return Windows OS version*/
 	private static String sWinXP = "Version 5.1";
 	private static String sWin7 = "Version 6.1";
-	private static String sVista = "Version 6.0";
+	private static String sVista = "Version 6.0"; 
 	
     
     /**return true if Windows OS */
@@ -219,6 +219,30 @@ public class Platform {
     {
     	return getWebBrowserName().equalsIgnoreCase(gsInternetExplorer8);
     }
+    
+    /**
+     * Returns true if current browser if InternetExplorer9
+     */
+    public static boolean isInternetExplorer9()
+    {
+    	return getWebBrowserName().equalsIgnoreCase(gsInternetExplorer9);
+    }
+    
+    /**
+     * Returns true if current browser if InternetExplorer10
+     */
+    public static boolean isInternetExplorer10()
+    {
+    	return getWebBrowserName().equalsIgnoreCase(gsInternetExplorer10);
+    }
+    
+    /**
+     * Returns true if current browser if InternetExplorer11
+     */
+    public static boolean isInternetExplorer11()
+    {
+    	return getWebBrowserName().equalsIgnoreCase(gsInternetExplorer11);
+    }
        
 
 	/**Global string for Mozilla Firefox Browser*/
@@ -238,9 +262,15 @@ public class Platform {
 
 	/**Global string for Microsoft Internet 8.0 Explorer Browser*/
 	public static String gsInternetExplorer8 = "Internet Explorer 8.0";
-
-	/**Global string for Safari Browser*/
-	public static String gsSafari = "Safari";
+	
+	/**Global string for Microsoft Internet 9.0 Explorer Browser*/
+	public static String gsInternetExplorer9 = "Internet Explorer 9.0";
+	
+	/**Global string for Microsoft Internet 10.0 Explorer Browser*/
+	public static String gsInternetExplorer10 = "Internet Explorer 10.0";
+	
+	/**Global string for Microsoft Internet 11.0 Explorer Browser*/
+	public static String gsInternetExplorer11 = "Internet Explorer 11.0";
 
 	/**Global string for Chrome Browser*/
 	public static String gsGoogleChrome = "Google Chrome";

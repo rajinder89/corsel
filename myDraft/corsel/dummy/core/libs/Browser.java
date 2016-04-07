@@ -439,6 +439,17 @@ public class Browser {
 	{
 		SeleniumCore.getBrowser().refresh();
 	}
+	
+	
+	/**
+	 * Refresh the page
+	 * @Parameter: n/a
+	 */
+	public static  void navigateTo(String sURL)
+	{
+		SeleniumCore.getBrowser().navigateTo(sURL);
+		Log.logScriptInfo("Navigating to URL: " + sURL + " ");
+	}
 
 
 

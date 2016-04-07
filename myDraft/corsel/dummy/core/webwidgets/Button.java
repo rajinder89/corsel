@@ -53,6 +53,25 @@ public class Button extends WebWidget {
 		}
 	}
 	
+	
+	/**
+	 * Submit the specified form
+	 * @return n/a
+	 */
+	public void submit() 
+	{
+		if (SeleniumCore.getBrowser().exists(sLocator))
+		{
+			Log.logScriptInfo("Submit " + sIdentifier + " " + sClassName);
+			SeleniumCore.getBrowser().submit(sLocator);
+		}
+		else
+		{
+			Log.errorHandler("Could not find " + sClassName + ": " + sIdentifier + " with locator of " +  "\"" + sLocator + "\"");
+		}
+	}
+
+	
 	/**
 	* Highlights the Button
 	* 

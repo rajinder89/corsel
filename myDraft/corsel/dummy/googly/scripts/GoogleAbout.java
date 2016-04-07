@@ -11,7 +11,6 @@ import dummy.core.libs.Excel;
 import dummy.core.libs.FileIO;
 import dummy.core.libs.Log;
 import dummy.core.libs.Platform;
-import dummy.core.webwidgets.VideoRecord;
 import dummy.googly.applibs.GoogleMainPage;
 
 
@@ -76,7 +75,7 @@ public class GoogleAbout {
 		
 		try{	//good practice to place test case in try catch block 
 		
-			//ACI Standard Testcase initialization header
+			// Standard Testcase initialization header
 			Log.startTestCase("Test and verify Google About page");
 			
 			//test data

@@ -1638,9 +1638,24 @@ public class Log
 				// value for the browser based on the value in Automation.properties
 				//Default IE browser is IE6.  Look for most recent version of browser first
 				if (gsAutomationTestBrowser.indexOf("Internet Explorer")>0| gsAutomationTestBrowser.indexOf("IE")>0){
-					if (gsAutomationTestBrowser.contains("8")){
+					
+					if (gsAutomationTestBrowser.contains("11")){
+						gsAutomationTestBrowser = Platform.gsInternetExplorer11;
+					}
+					
+					else if (gsAutomationTestBrowser.contains("10")){
+						gsAutomationTestBrowser = Platform.gsInternetExplorer10;
+					}
+					
+					else if (gsAutomationTestBrowser.contains("9")){
+						gsAutomationTestBrowser = Platform.gsInternetExplorer9;
+					}
+					
+					else if (gsAutomationTestBrowser.contains("8")){
 						gsAutomationTestBrowser = Platform.gsInternetExplorer8;
-					}else if (gsAutomationTestBrowser.contains("7")){
+					}
+					
+					else if (gsAutomationTestBrowser.contains("7")){
 						gsAutomationTestBrowser = Platform.gsInternetExplorer7;
 
 					}

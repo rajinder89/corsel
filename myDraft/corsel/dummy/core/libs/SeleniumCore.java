@@ -3,8 +3,6 @@ package dummy.core.libs;
 import java.util.List;
 import java.util.Set;
 
-
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
@@ -18,7 +16,6 @@ import org.openqa.selenium.firefox.internal.ProfilesIni;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.remote.DesiredCapabilities;
-import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -37,7 +34,6 @@ public class SeleniumCore {
 	public static WebDriver driver;
 	
 	private static String defaultBrowser = "*firefox";
-	private static String browser_safari = "*safari";
 	private static String browser_firefox = "*firefox";
 	private static String browser_ie = "*iexplore";
 	private static String browser_chrome = "*googlechrome";
@@ -60,7 +56,6 @@ public class SeleniumCore {
 	 */
 	public static void setCurrentBrowser(String browserName)
 	{
-		if(browserName.toLowerCase().contains("safari")){currentBrowser = browser_safari;}
 		if(browserName.toLowerCase().contains("explorer")){currentBrowser = browser_ie;}
 		if(browserName.toLowerCase().contains("firefox")){currentBrowser = browser_firefox;}
 		if(browserName.toLowerCase().contains("chrome")){currentBrowser = browser_chrome;}
@@ -99,7 +94,6 @@ public class SeleniumCore {
 		{
 			String myBrowserName = "";
 			if(currentBrowser.equals(browser_ie)){myBrowserName = "Internet Explorer";}
-			if(currentBrowser.equals(browser_safari)){myBrowserName = "Safari";}
 			if(currentBrowser.equals(browser_firefox)){myBrowserName = "Firefox";}
 			if(currentBrowser.equals(browser_chrome)){myBrowserName = "Google Chrome";}
 			return myBrowserName;
@@ -114,8 +108,7 @@ public class SeleniumCore {
 			String browserVersion = "Unknown";
 			
 			try{
-				if(currentBrowser.equals(browser_ie)){browserVersion = userAgent.split("MSIE ")[1].split("; Windows")[0];}
-				if(currentBrowser.equals(browser_safari)){browserVersion = userAgent.split("Safari/")[1].split(" Safari")[0];}
+			;	if(currentBrowser.equals(browser_ie)){browserVersion = userAgent.split("MSIE ")[1].split("; Windows")[0];}
 				if(currentBrowser.equals(browser_firefox)){browserVersion = userAgent.split("Firefox/")[1];}
 				if(currentBrowser.equals(browser_chrome)){browserVersion = userAgent.split("Chrome/")[1].split(" Safari")[0];}
 			} catch (Exception e){}
@@ -155,20 +148,16 @@ public class SeleniumCore {
 					options.addArguments("start-maximized");
 					System.setProperty("webdriver.chrome.driver", Log.gsAutomationAutoPath + "chromedriver.exe");
 					driver = new ChromeDriver(options);
-					
 				} 
+				
 				else if(browserName.indexOf("ie") != -1){
 					DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
 					capabilities.setCapability(InternetExplorerDriver.NATIVE_EVENTS, false);
 					capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
 					System.setProperty("webdriver.ie.driver", Log.gsAutomationAutoPath + "IEDriverServer.exe");
 					driver = new InternetExplorerDriver(capabilities);
-
+				}
 				
-				}
-				else if (browserName.contains("safari")) {
-					driver = new SafariDriver();
-				}
 	
 				else {//firefox is default
 					try
@@ -249,7 +238,7 @@ public class SeleniumCore {
 	}
 
 		/**
-		 * closes the current browser window
+		 * Closes all the browser windows opened by Webdriver
 		 */
 		public void close() {
 			
@@ -596,34 +585,7 @@ public class SeleniumCore {
 			
 		}
 
-//		/**
-//		 * Simulates a user pressing and releasing a key.
-//		 * @param sLocator, element locator
-//		 * @param keySequence, Either be a string("\" followed by the numeric keycode
-//		 * 						of the key to be pressed, normally the ASCII value of that key),
-//		 * 						or a single character. For example: "w", "\119".
-//		 */
-//		public void keyPress(String sLocator, String keySequence) {
-//			
-//			
-//				Actions action = new Actions(driver);
-//				action.sendKeys(driver.findElement(by(sLocator)),keySequence).perform();
-//			
-//		}
-		
-//		
-//		/**
-//		 * Simulates a user pressing and releasing a key in the active window.
-//		 * @param arg0 - key
-//		 */
-//		public void keyPressNative(String arg0) {
-//			
-//				Platform.sendKeyPress(Integer.valueOf(arg0) );
-//			
-//		}
-
-
-		
+	
 		/**
 		 * Simulates a user pressing a key (without releasing it yet).
 		 * @param sLocator, element locator
@@ -669,13 +631,10 @@ public class SeleniumCore {
 		 */
 		public void check(String sLocator)
 		{
-			
-				WebElement element = driver.findElement(by(sLocator));
-				if (!element.isSelected()) {
-					element.click();
-				}
-			
-		
+			WebElement element = driver.findElement(by(sLocator));
+			if (!element.isSelected()) {
+				element.click();
+			}
 		}
 
 		/**
@@ -683,14 +642,11 @@ public class SeleniumCore {
 		 * @param String sLocator - string used to locate the widget
 		 */
 		public void uncheck(String sLocator)
-		{
-			
-				WebElement element = driver.findElement(by(sLocator));
-				if (element.isSelected()) {
-					element.click();
-				}
-	
-			
+		{		
+			WebElement element = driver.findElement(by(sLocator));
+			if (element.isSelected()) {
+				element.click();
+			}
 		}
 
 		/**
@@ -778,13 +734,16 @@ public class SeleniumCore {
 		public boolean isElementPresent(String sLocator)
 		{
 		
-				By byLocator = by(sLocator);
-				try{
+			By byLocator = by(sLocator);
+			try{
 					driver.findElement(byLocator);
 					return true;
-					}catch(Exception e){
+				}
+			
+			catch(Exception e)
+				{
 					return false;
-					}
+				}
 		}
 
 		/**
@@ -806,15 +765,15 @@ public class SeleniumCore {
 		 */
 		public boolean isTextPresent(String text) {
 		
-					try{
-			            boolean b = driver.getPageSource().contains(text);
-			            return b;
-			        }
-			        catch(Exception e){
-			            return false;
+		try{
+	            boolean b = driver.getPageSource().contains(text);
+	            return b;
+	        }
+	        catch(Exception e){
+	            return false;
 
-			        }
-		
+	        }
+
 		}
 
 		/**
@@ -828,9 +787,9 @@ public class SeleniumCore {
 			
 			return driver.findElement(by(locator)).isDisplayed();
 			
-		}catch(Exception ex){
+			}catch(Exception ex){
 			return false;
-		}
+			}
 
 		}
 		
@@ -847,9 +806,10 @@ public class SeleniumCore {
 			
 				return driver.findElement(by(locator)).isEnabled();
 		
-		}catch(Exception ex){
+			}catch(Exception ex){
+			
 			return false;
-		}
+			}
 
 		}
 
@@ -871,6 +831,7 @@ public class SeleniumCore {
 		 * @return true/false
 		 */
 		public boolean verifyTrue(boolean condition) {
+			
 			return Log.altVerify(true, condition, "");
 		}
 		
@@ -952,8 +913,6 @@ public class SeleniumCore {
 		
 		}
 		
-		
-
 		/**
 		 * Selects a frame within the current window. (You may invoke this command
 		 * multiple times to select nested frames.) To select the parent frame, use
@@ -1022,17 +981,12 @@ public class SeleniumCore {
 		 */
 		public void waitUntilVisible(String sLocator, long iWait)
 		{
-		    
-		
-				ExpectedCondition<WebElement> elementVisibleCondition = ExpectedConditions.visibilityOfElementLocated(by(sLocator));
+		    ExpectedCondition<WebElement> elementVisibleCondition = ExpectedConditions.visibilityOfElementLocated(by(sLocator));
 
-				WebDriverWait wait = new WebDriverWait(driver, iWait);
-				wait.until(elementVisibleCondition);
-			
-			
+			WebDriverWait wait = new WebDriverWait(driver, iWait);
+			wait.until(elementVisibleCondition);
 		}	
-		
-		
+				
 
 		/**
 		 * Verifies that the specified element is somewhere on the page. extend the
@@ -1050,24 +1004,20 @@ public class SeleniumCore {
 				return bElementPresent;
 		}
 		
-		
-		
-		
-		
-		
-		
+			
 		/**
 		 * Prints all links found with default locators
+		 * @return 
 		 */
 		public void printAllLinks()
 		{
+			List<WebElement> links = driver.findElements(By.tagName("a"));
+
 			
-				List<WebElement> link=driver.findElements(By.tagName("a"));
-				for(WebElement ele:link)
-				{
-			     System.out.println(ele.getText());
-				} 
-	
+			for(WebElement ele:links )
+			{
+				System.out.println(ele.getText());
+			}
 		}
 
 
@@ -1190,12 +1140,20 @@ public class SeleniumCore {
 		{
 			driver.navigate().refresh();	
 		}
+		
+		
+		/**
+		 * Navigate to the url
+		 * @param: url - the url to be navigated to
+		 */
+		public void navigateTo(String url)
+		{
+			driver.navigate().to(url);	
+		}
 
 
 		/**
 		 * Deletes all Cookies
-		 * @param arg0 required for RC not required for webdriver
-		 * @param arg1 required for RC not required for webdriver
 		 */
 		public void deleteCookie(String arg0, String arg1)
 		{

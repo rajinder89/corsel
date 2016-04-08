@@ -62,7 +62,7 @@ public class GoogleMainPage {
 	 * @return Returns web UI object of specified type and definition 
 	 */
 	public static Button btnGoogleSearch() { 
-		return new Button("name=btnG");
+		return new Button("name=btnK");
 		
 	}
 	

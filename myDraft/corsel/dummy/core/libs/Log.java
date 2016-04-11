@@ -835,7 +835,7 @@ public class Log
 			}
 
 		}
-		
+
 	}
 
 	

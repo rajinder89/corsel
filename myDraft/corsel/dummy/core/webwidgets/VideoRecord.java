@@ -63,8 +63,8 @@ public class VideoRecord {
 	           Log.gsScriptName);  // "My Automation Video"   
 	   
 		       screenRecorder.start();   
-		       
-		       screenRecorder.getStartTime();
+		     
+		      screenRecorder.getStartTime();
     	
     		} catch (IOException e) {
     			e.printStackTrace();
@@ -80,6 +80,7 @@ public class VideoRecord {
        {
     	    try {
             	 	screenRecorder.stop();
+            	// 	Log.logScriptInfo("Video Saved to: "+videoFilepath);
     	    	} 
                catch (IOException e) {
                    e.printStackTrace();

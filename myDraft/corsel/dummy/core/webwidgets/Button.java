@@ -17,6 +17,12 @@ public class Button extends WebWidget {
 		super(sID,"PushButton");
 
 	}
+	
+	//constructor to override object name with sLabel variable
+	public Button(String sID, String sLabel) {
+		super(sID,"Button",sLabel);
+
+	}
 
 	/**
 	 * Clicks on calling object

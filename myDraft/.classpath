@@ -28,6 +28,5 @@
 	<classpathentry kind="lib" path="D:/Set Up Files/Selenium/selenium-java-2.53.0/selenium-2.53.0/selenium-java-2.53.0-srcs.jar"/>
 	<classpathentry kind="lib" path="D:/Set Up Files/Selenium/jxl-2.6.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="C:/Users/rajinder_singh/Downloads/ConcatDemo.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

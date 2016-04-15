@@ -31,7 +31,7 @@ import java.util.zip.ZipFile;
 public class FileIO
 {	
 	/**Buffer size (32KB) for file manipulation methods.*/
-	 public final static int FILE_BUFFER_SIZE = 32 * 1024;
+	 public final static int FILE_BUFFER_SIZE = 32 * 1024;	
 	 public final static String slash = "/";
 	 public final static String backslash = "\\";
 	 
@@ -991,7 +991,7 @@ s	*/
 			Log.errorHandler( "Error in FileIO.appendListToFile: ", e );
 		}
 	}
-
+	
 	/** 
 	* Appends specified string content to a file <p>
 	* @Parameter: filename		path and filename of file to append string to

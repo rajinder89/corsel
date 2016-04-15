@@ -62,7 +62,7 @@ public class VideoRecord {
 	           videoFilepath, 
 	           Log.gsScriptName);  // "My Automation Video"   
 	   
-		       screenRecorder.start();   
+		      screenRecorder.start();   
 		     
 		      screenRecorder.getStartTime();
     	
@@ -118,43 +118,7 @@ public class VideoRecord {
            		}
           
            }
-           
 
-       
-       
-//       public static void deleteRecordedFile1() 
-//       { 
-//       
-//       
-//       File folder = new File(dir);
-//       File fList[] = folder.listFiles();
-//       // Searchs .lck
-//       for (int i = 0; i < fList.length; i++) {
-//           String pes = fList[i];
-//           if (pes.endsWith(".lck")) {
-//               // and deletes
-//               boolean success = (new File(fList[i]).delete());
-//           }
-//       }
-//       }
-//       
-//       
-//       
-//       
-//       public void deleteRecordedFile() {
-//           if (RecordedFile != null) {
-//                 String[] children = RecordedFile.list();
-//                 for (int i = 0; i &lt; children.length; i++) {
-//                       new File(RecordedFile, children[i]).delete();
-//                       System.out.println("Deleted this " + RecordedFile + "//"
-//                                   + children[i]);
-//                 }
-//
-//                 // The directory is now empty so delete it
-//                 RecordedFile.delete();
-//           }
-//     }
-       
            
        public static String getRecordedFiles(){
          	

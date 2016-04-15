@@ -241,7 +241,7 @@ public class Log
 
 	/**Automation html formatted result file name*/
 	public static String gsHtmlResultFileName = "auto_report";
-
+	
 	/**Global long for script start time*/
 	public static long glStartTime = 0;
 
@@ -2675,8 +2675,6 @@ public class Log
 		FileIO.appendStringToFile(sPassFailFile,FileIO.getFileContentsByUTF8(sTempTestcaseListFile));
 		FileIO.appendStringToFile(sPassFailFile,"<BR><BR><BR><BR>");
 		FileIO.appendStringToFile(sPassFailFile,"</HTML>");
-
-
 
 	}
 

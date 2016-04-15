@@ -42,7 +42,7 @@ public class GoogleAbout {
 		Log.gsScriptTestArea = FileIO.getParentPath(Platform.getCurrentProjectPath() + Log.gsScriptName.replace(".",Platform.getFileSeparator())); 	//script test area uses the project path info and is auto-generated via this code so do not modify this item 	
 		
 		Log.initialize(); //Standard script initialization routine
-		Log.setAutomationProperty("automation.properties", "gsAutomationTestBrowser", "Internet Explorer");
+	//	Log.setAutomationProperty("automation.properties", "gsAutomationTestBrowser", "Internet Explorer");
 		
 	//	VideoRecord.startRecording();
 		

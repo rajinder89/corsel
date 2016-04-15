@@ -59,6 +59,32 @@ public class WebWidget  {
 	}
 
 	
+	//add additional constructors to allow for multiple identifiers
+		public WebWidget(String sID, String sClassType, String sLabel) {
+			sLocator = sID;
+			sClassName = sClassType;
+
+			try{
+			String sTmpObjPar = new Throwable().fillInStackTrace().getStackTrace()[2].getClassName();
+				//sun.reflect.Reflection.getCallerClass(2).getName();
+			//System.out.println(sTmpObjPar);
+			int iParPos = sTmpObjPar.lastIndexOf(".");
+			sObjParent = sTmpObjPar.substring(iParPos+1);
+
+			//String sTmpObj = new Throwable().fillInStackTrace().getStackTrace()[2].getMethodName();
+			//System.out.println(sTmpObj);
+				//sun.reflect.Reflection.getCallerClass(2).getMethods()[0].toString();
+			//int iPos = sTmpObj.lastIndexOf(".");
+			sObjName = sLabel;
+
+			sIdentifier = sObjParent + "." + sObjName;
+			}
+			catch(Exception e){
+				Log.errorHandler("Error occurred with definition of object", e);
+			}
+		}
+		
+	
 	/**
 	 * Gets text from text field type widget
 	 * @return String - returns text value of calling object

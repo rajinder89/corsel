@@ -108,7 +108,7 @@ public class SeleniumCore {
 			String browserVersion = "Unknown";
 			
 			try{
-			;	if(currentBrowser.equals(browser_ie)){browserVersion = userAgent.split("MSIE ")[1].split("; Windows")[0];}
+				if(currentBrowser.equals(browser_ie)){browserVersion = userAgent.split("MSIE ")[1].split("; Windows")[0];}
 				if(currentBrowser.equals(browser_firefox)){browserVersion = userAgent.split("Firefox/")[1];}
 				if(currentBrowser.equals(browser_chrome)){browserVersion = userAgent.split("Chrome/")[1].split(" Safari")[0];}
 			} catch (Exception e){}
@@ -135,7 +135,6 @@ public class SeleniumCore {
 					browserName = Platform.gsMozillaFirefox;
 				}
 		}
-
 
 			SeleniumCore.setCurrentBrowser(browserName);
 			
@@ -178,15 +177,12 @@ public class SeleniumCore {
 					}
 					
 
-				}
-				
+				}				
 				
 				driver.manage().window().maximize();
 				
-
 				userAgent = (String) ((JavascriptExecutor) driver).executeScript("return navigator.userAgent;");
-			
-				
+							
 			}
 			
 	
@@ -242,30 +238,28 @@ public class SeleniumCore {
 		 */
 		public void close() {
 			
-			try{
-			
+			try{			
 				//driver.close();
 				driver.quit();
-			
-			}
+				}
 			catch(Exception e){}
 		}
 
 		/**
 		 * Makes the current browser go back using the "back" button
 		 */
-		public void goBack() {
-		
-				driver.navigate().back();	
-			}
+		public void goBack() 
+		{
+			driver.navigate().back();	
+		}
 			
 
 
 		/**
 		 * maximizes the current browser window - may not work with all browsers
 		 */
-		public void windowMaximize() {
-		
+		public void windowMaximize()
+		{
 			driver.manage().window().maximize();	
 		}
 
@@ -274,9 +268,7 @@ public class SeleniumCore {
 		 */
 		public void windowFocus()
 		{
-	
-				((JavascriptExecutor) driver).executeScript("window.focus;");	
-		
+			((JavascriptExecutor) driver).executeScript("window.focus;");	
 		}
 
 
@@ -292,10 +284,8 @@ public class SeleniumCore {
 		 */
 		public void type(String sLocator, String value)
 		{
-	
-				driver.findElement(by(sLocator)).clear();
-				driver.findElement(by(sLocator)).sendKeys(value);
-		
+			driver.findElement(by(sLocator)).clear();
+			driver.findElement(by(sLocator)).sendKeys(value);
 		}
 
 
@@ -306,8 +296,8 @@ public class SeleniumCore {
 		 */
 		public void setText(String sLocator, String value)
 		{
-				driver.findElement(by(sLocator)).clear();
-				driver.findElement(by(sLocator)).sendKeys(value);
+			driver.findElement(by(sLocator)).clear();
+			driver.findElement(by(sLocator)).sendKeys(value);
 		}
 
 		
@@ -318,28 +308,26 @@ public class SeleniumCore {
 		 */
 		public void sendKeys(String sLocator, Keys sKey)
 		{
-		
-				driver.findElement(by(sLocator)).sendKeys(sKey);
-		
+			driver.findElement(by(sLocator)).sendKeys(sKey);
 		}
 		
 
 		/**
-		 * convertLocatorToBy(String sLocator,boolean bExactMatch)
+		 * by(String sLocator,boolean bExactMatch)
 		 * returns a WebDriver By datatype from a given string locator value
-		 * <p>
-		 * @param String sLocator - Selenium RC locator to be converted to WebDriver By locator type
+		 * @param String sLocator - WebDriver By locator type
 		 * @param boolean bExactMatch - true is locator must be exact match
 		 */
-		public By by(String sLocator,boolean bExactMatch)
+		public static By by(String sLocator,boolean bExactMatch)
 		{
 		@SuppressWarnings("unused")
 		By by;	
-		String sName 	= "name=";
-		String sId 		= "id=";
-		String sLink 	= "link=";
-		String sCss 	= "css=";
-		String sXpath	= "xpath=";
+		String sName 		= "name=";
+		String sId 			= "id=";
+		String sLink 		= "link=";
+		String sCss 		= "css=";
+		String sXpath		= "xpath=";
+		String sClassName 	= "classname=";
 		
 		if (sLocator.startsWith(sName)){
 			//System.out.println(sLocator.substring(sName.length()));
@@ -359,6 +347,12 @@ public class SeleniumCore {
 			else
 				return by = By.partialLinkText(sLocator.substring(sLink.length()));
 		}
+		
+		else if (sLocator.startsWith(sClassName)){
+			//System.out.println(sLocator.substring(sClassName.length()));
+			return by = By.className(sLocator.substring(sClassName.length())); 
+		}	
+		
 		else if (sLocator.startsWith(sXpath)){
 			//System.out.println(sLocator.substring(sXpath.length()));
 			return by = By.xpath(sLocator.substring(sXpath.length())); 
@@ -376,9 +370,9 @@ public class SeleniumCore {
 		 * returns a WebDriver By datatype from a given string locator partial value
 		 * @param String sLocator - WebDriver By locator type
 		 */
-		public By by(String sLocator)
+		public static By by(String sLocator)
 		{
-		return by(sLocator,WebWidget.bExactMatch);
+			return by(sLocator,WebWidget.bExactMatch);
 		}
 		
 		/**
@@ -387,8 +381,7 @@ public class SeleniumCore {
 		 */
 		public void click(String sLocator)
 		{
-			
-				driver.findElement(by(sLocator)).click();
+			driver.findElement(by(sLocator)).click();
 		}
 		
 		
@@ -424,25 +417,29 @@ public class SeleniumCore {
 		 * @param sLabel item to select in the list box
 		 * @throws Exception if listbox widget is not found 
 		 */
-		public void selectByLabel(String sLocator, String sLabel) throws Exception {
+		public void selectByLabel(String sLocator, String sLabel) throws Exception
+		{
+			WebElement weListbox = driver.findElement(by(sLocator));
+			Select select = new Select(weListbox);
+			List<WebElement> options = select.getOptions();
 			
-				WebElement weListbox = driver.findElement(this.by(sLocator));
-				Select select = new Select(weListbox);
-				List<WebElement> options = select.getOptions();
-				boolean bFound = false;
+			boolean bFound = false;
 
-				for (WebElement option : options) {
-					if (option.getText().equals(sLabel)) {
-						bFound = true;
-						option.click();
-						break;
-					}
-				}
-
-				if (!bFound) {
-					throw new Exception("Option not found");
+			for (WebElement option : options) 
+			{
+				if (option.getText().equals(sLabel)) 
+				{
+					bFound = true;
+					option.click();
+					break;
 				}
 			}
+
+			if (!bFound) 
+			{
+				throw new Exception("Option not found");
+			}
+		}
 		
 		
 		/**
@@ -452,44 +449,42 @@ public class SeleniumCore {
 		 * @param sLabel item to select in the list box
 		 * @throws Exception if listbox is not found
 		 */
-		public void selectByPartialLabel(String sLocator, String sLabel) throws Exception {
-			
-				WebElement weListbox = driver.findElement(this.by(sLocator));
-				Select select = new Select(weListbox);
-				List<WebElement> options = select.getOptions();
-				boolean bFound = false;
+		public void selectByPartialLabel(String sLocator, String sLabel) throws Exception 
+		{		
+			WebElement weListbox = driver.findElement(by(sLocator));
+			Select select = new Select(weListbox);
+			List<WebElement> options = select.getOptions();
+			boolean bFound = false;
 
-				for (WebElement option : options) {
-					if (option.getText().contains(sLabel.trim())) {
-						bFound = true;
-						option.click();
-						break;
-					}
-				}
-
-				if (!bFound) {
-					throw new Exception("Option not found");
+			for (WebElement option : options) 
+			{
+				if (option.getText().contains(sLabel.trim())) 
+				{
+					bFound = true;
+					option.click();
+					break;
 				}
 			}
+
+			if (!bFound) 
+			{
+				throw new Exception("Option not found");
+			}
 			
-	
-		
-		
+		}
 		
 
 		/**
 		 * Selects an item in a listbox found using the sLocator and Index value
-		 * Note: not available for Selenium RC version 1
 		 * @param sLocator string used to locate the widget
 		 * @param iIndex Index item to select in the list box
 		 * @throws Exception if listbox is not found
 		 */
 		public void selectByIndex(String sLocator, int iIndex)
 		{ 
-				WebElement weListbox = driver.findElement(this.by(sLocator));
-				Select select = new Select(weListbox);
-				select.selectByIndex(iIndex);
-				
+			WebElement weListbox = driver.findElement(by(sLocator));
+			Select select = new Select(weListbox);
+			select.selectByIndex(iIndex);
 		}
 		
 		
@@ -501,13 +496,12 @@ public class SeleniumCore {
 		 * @param sLocator1 specifies the x,y position (i.e. - 10,20) of the mouse event
 		 * relative to the element returned by the locator.
 		 */
-		public void clickAt(String sLocator0, String sLocator1) {
-			
-				Actions builder = new Actions(driver);
-				WebElement element = driver.findElement(by(sLocator0));
-				builder.moveToElement(element).click().build().perform();
-				//driver.findElement(convertLocatorToBy(sLocator0)).click();
-			
+		public void clickAt(String sLocator0, String sLocator1) 
+		{		
+			Actions builder = new Actions(driver);
+			WebElement element = driver.findElement(by(sLocator0));
+			builder.moveToElement(element).click().build().perform();
+			//driver.findElement(by(sLocator0)).click();
 		}
 
 		/**
@@ -516,11 +510,9 @@ public class SeleniumCore {
 		 */
 		public void clickMouseButton(String sLocator)
 		{
-			
-				Actions builder = new Actions(driver);
-				WebElement element = driver.findElement(by(sLocator));
-				builder.contextClick(element).click().build().perform();
-			
+			Actions builder = new Actions(driver);
+			WebElement element = driver.findElement(by(sLocator));
+			builder.contextClick(element).click().build().perform();
 		}
 
 		
@@ -529,19 +521,17 @@ public class SeleniumCore {
 		 * @param String sLocator - string used to locate the widget
 		 */
 		public void rightClick(String sLocator)
-		{
-		
-				Actions action = new Actions(driver);
-				action.contextClick(driver.findElement(by(sLocator))).perform();			
-	
+		{		
+			Actions action = new Actions(driver);
+			action.contextClick(driver.findElement(by(sLocator))).perform();			
 		}
 
 		/**
 		 * Double clicks the right mouse button on the widget found using the sLocator string passed in
 		 * @param String sLocator - string used to locate the widget
 		 */
-		public void doubleClick(String sLocator) {
-		
+		public void doubleClick(String sLocator) 
+		{
 			Actions action = new Actions(driver);
 			action.doubleClick(driver.findElement(by(sLocator))).perform();			
 		}
@@ -550,11 +540,11 @@ public class SeleniumCore {
 		 * Simulates a user hovering a mouse over the specified element.
 		 * @param sLocator, element locator
 		 */
-		public void hover(String sLocator) {
-
-				Actions action = new Actions(driver);
-				action.moveToElement(driver.findElement(by(sLocator))).perform();
-			}	
+		public void hover(String sLocator)
+		{
+			Actions action = new Actions(driver);
+			action.moveToElement(driver.findElement(by(sLocator))).perform();
+		}	
 		
 		
 		
@@ -562,15 +552,12 @@ public class SeleniumCore {
 		 * Simulates a user hovering a mouse over the specified element.
 		 * @param sLocator, element locator
 		 */
-		public void mouseOver(String sLocator) {
-
-	
-				Actions action = new Actions(driver);
-//				action.moveToElement(driver.findElement(convertLocatorToBy(sLocator))).perform();
-				action.moveToElement(driver.findElement(by(sLocator))).build().perform();
-				Platform.sleep(Log.giAutomationPause2TO);
-				Platform.sleep(Log.giAutomationPause2TO);
-			
+		public void mouseOver(String sLocator) 
+		{
+			Actions action = new Actions(driver);
+			action.moveToElement(driver.findElement(by(sLocator))).build().perform();
+			Platform.sleep(Log.giAutomationPause2TO);
+			Platform.sleep(Log.giAutomationPause2TO);
 		}
 
 		/**
@@ -578,11 +565,10 @@ public class SeleniumCore {
 		 * if the element is an input field, move the cursor to that field.
 		 * @param sLocator, element locator
 		 */
-		public void focus(String sLocator) {
-			
-				Actions action = new Actions(driver);
-				action.moveToElement(driver.findElement(by(sLocator))).perform();
-			
+		public void focus(String sLocator) 
+		{			
+			Actions action = new Actions(driver);
+			action.moveToElement(driver.findElement(by(sLocator))).perform();
 		}
 
 	
@@ -593,11 +579,10 @@ public class SeleniumCore {
 		 * 						 of the key to be pressed, normally the ASCII value of that key),
 		 * 						or a single character. For example: "w", "\119".
 		 */
-		public void keyDown(String sLocator, String keySequence) {
-			
-				Actions action = new Actions(driver);
-				action.sendKeys(driver.findElement(by(sLocator)),keySequence).perform();
-			
+		public void keyDown(String sLocator, String keySequence) 
+		{
+			Actions action = new Actions(driver);
+			action.sendKeys(driver.findElement(by(sLocator)),keySequence).perform();
 		}
 
 		/**
@@ -607,10 +592,10 @@ public class SeleniumCore {
 		 * 						of the key to be pressed, normally the ASCII value of that key),
 		 * 						or a single character. For example: "w", "\119".
 		 */
-		public void keyUp(String sLocator, String keySequence) {
-						
-				Actions action = new Actions(driver);
-				action.sendKeys(driver.findElement(by(sLocator)),keySequence).perform();
+		public void keyUp(String sLocator, String keySequence) 
+		{
+			Actions action = new Actions(driver);
+			action.sendKeys(driver.findElement(by(sLocator)),keySequence).perform();
 		}
 
 
@@ -619,10 +604,9 @@ public class SeleniumCore {
 		 * submit buttons, e.g. single-input "Search" forms.
 		 * @param sLocator, an element locator for the form you want to submit
 		 */
-		public void submit(String sLocator) {
-
-				driver.findElement(by(sLocator)).submit();
-	
+		public void submit(String sLocator) 
+		{
+			driver.findElement(by(sLocator)).submit();
 		}
 
 		/**
@@ -632,7 +616,9 @@ public class SeleniumCore {
 		public void check(String sLocator)
 		{
 			WebElement element = driver.findElement(by(sLocator));
-			if (!element.isSelected()) {
+			
+			if (!element.isSelected()) 
+			{
 				element.click();
 			}
 		}
@@ -644,7 +630,9 @@ public class SeleniumCore {
 		public void uncheck(String sLocator)
 		{		
 			WebElement element = driver.findElement(by(sLocator));
-			if (element.isSelected()) {
+			
+			if (element.isSelected()) 
+			{
 				element.click();
 			}
 		}
@@ -655,10 +643,9 @@ public class SeleniumCore {
 		 * @param sLocator, an element locator pointing to a checkbox or radio button
 		 * @return true if the checkbox is checked, false otherwise
 		 */
-		public boolean ischecked(String sLocator) {
-		
-				return driver.findElement(by(sLocator)).isSelected(); 
-		
+		public boolean ischecked(String sLocator) 
+		{
+			return driver.findElement(by(sLocator)).isSelected(); 
 		}
 
 		
@@ -709,13 +696,13 @@ public class SeleniumCore {
 		{
 			boolean foundFrame = false;
 
-			for (int i = 0; i < Log.giAutomationLongTO; i++) {
+			for (int i = 0; i < Log.giAutomationLongTO; i++) 
+			{
 				try {
-					
 						driver.switchTo().frame(frameName);
 										
-					foundFrame = true;
-					break;
+						foundFrame = true;
+						break;
 					}
 				catch (Exception e) {
 					Platform.sleep(Log.giAutomationPause2TO);
@@ -733,8 +720,8 @@ public class SeleniumCore {
 		 */
 		public boolean isElementPresent(String sLocator)
 		{
-		
 			By byLocator = by(sLocator);
+			
 			try{
 					driver.findElement(byLocator);
 					return true;
@@ -750,10 +737,9 @@ public class SeleniumCore {
 		 * Returns a string containing the current browser page body text or page source
 		 * @return String of the current browser body text or page source
 		 */
-		public String getBodyText() {
-		
+		public String getBodyText() 
+		{	
 			return driver.getPageSource();	
-	
 		}
 
 
@@ -763,17 +749,16 @@ public class SeleniumCore {
 		 * @param String text - text to search for on the page
 		 * @return boolean true/false if the text is found
 		 */
-		public boolean isTextPresent(String text) {
-		
-		try{
-	            boolean b = driver.getPageSource().contains(text);
-	            return b;
-	        }
-	        catch(Exception e){
-	            return false;
-
-	        }
-
+		public boolean isTextPresent(String text) 
+		{		
+			try{
+		            boolean b = driver.getPageSource().contains(text);
+		            return b;
+		       }
+		        catch(Exception e)
+				{
+		            return false;
+		        }
 		}
 
 		/**
@@ -782,13 +767,16 @@ public class SeleniumCore {
 		 * @param locator, an element locator
 		 * @return true if the specified element is visible, false otherwise
 		 */
-		public boolean isVisible(String locator) {
-		try{
+		public boolean isVisible(String locator) 
+		{
+			try{
 			
-			return driver.findElement(by(locator)).isDisplayed();
+				return driver.findElement(by(locator)).isDisplayed();
 			
-			}catch(Exception ex){
-			return false;
+				}
+			catch(Exception ex)
+			{
+				return false;
 			}
 
 		}
@@ -801,27 +789,26 @@ public class SeleniumCore {
 		 * @param locator an element locator
 		 * @return true if the specified element is editable, false otherwise
 		 */
-		public boolean isEditable(String locator) {
-		try{
-			
-				return driver.findElement(by(locator)).isEnabled();
-		
-			}catch(Exception ex){
-			
-			return false;
+		public boolean isEditable(String locator) 
+		{
+			try{
+					return driver.findElement(by(locator)).isEnabled();
+				}
+			catch(Exception ex)
+			{
+				return false;
 			}
 
 		}
 
-
-
-
+		
 		/**
 		 * Assert the condition is true
 		 * @param message description of comparison
 		 * @param condition comparison resulting in a boolean 
 		 */
-		public void assertTrue(String message, boolean condition) {
+		public void assertTrue(String message, boolean condition) 
+		{
 			Log.altVerify(true, condition, message);
 		}
 
@@ -830,8 +817,8 @@ public class SeleniumCore {
 		 * @param condition comparison resulting in a boolean 
 		 * @return true/false
 		 */
-		public boolean verifyTrue(boolean condition) {
-			
+		public boolean verifyTrue(boolean condition)
+		{
 			return Log.altVerify(true, condition, "");
 		}
 		
@@ -845,8 +832,8 @@ public class SeleniumCore {
 		 * @param text2, actual string content
 		 * @return true if strings match, false otherwise
 		 */
-		public boolean verifyEquals(String text1, String text2) {
-
+		public boolean verifyEquals(String text1, String text2) 
+		{
 			return Log.altVerify(text1, text2, true);
 		}
 
@@ -857,10 +844,9 @@ public class SeleniumCore {
 		 * <p>
 		 * @param sLocator, an element locator
 		 */
-		public String getValue(String sLocator) {
-
-				return driver.findElement(by(sLocator)).getAttribute("value");
-		
+		public String getValue(String sLocator) 
+		{
+			return driver.findElement(by(sLocator)).getAttribute("value");
 		}
 
 		/**
@@ -869,10 +855,9 @@ public class SeleniumCore {
 		 * <p>
 		 * @param sLocator, an element locator
 		 */
-		public String getText(String sLocator) {
-
-				return driver.findElement(by(sLocator)).getText();
-		
+		public String getText(String sLocator) 
+		{
+			return driver.findElement(by(sLocator)).getText();
 		}
 
 		/**
@@ -880,10 +865,9 @@ public class SeleniumCore {
 		 * @param sLocator object locator identifier
 		 * @return the selected option value in the specified select drop-down
 		 */
-		public String getSelectedValue(String sLocator) {
-
-				return driver.findElement(by(sLocator)).getAttribute("value");
-			
+		public String getSelectedValue(String sLocator) 
+		{
+			return driver.findElement(by(sLocator)).getAttribute("value");
 		}
 		
 		/**
@@ -892,10 +876,8 @@ public class SeleniumCore {
 		 */
 		public String getSelectedItemText(String sLocator)
 		{
-		
-				WebElement wListbox = driver.findElement(by(sLocator));
-				return new Select(wListbox).getFirstSelectedOption().getText();
-				
+			WebElement wListbox = driver.findElement(by(sLocator));
+			return new Select(wListbox).getFirstSelectedOption().getText();
 		}
 		
 		
@@ -905,12 +887,11 @@ public class SeleniumCore {
 		 * @param sLocatorFrom - locator to grab object from
 		 * @param sLocatorTo - locator to drop object into
 		 */
-		public void dragAndDrop(String sLocatorFrom,String sLocatorTo) {
-		
-				WebElement fromItem1 = driver.findElement(by(sLocatorFrom));
-				WebElement toItem2 = driver.findElement(by(sLocatorTo));
-				new Actions(driver).dragAndDrop(fromItem1, toItem2).build().perform();
-		
+		public void dragAndDrop(String sLocatorFrom,String sLocatorTo)
+		{
+			WebElement fromItem1 = driver.findElement(by(sLocatorFrom));
+			WebElement toItem2 = driver.findElement(by(sLocatorTo));
+			new Actions(driver).dragAndDrop(fromItem1, toItem2).build().perform();
 		}
 		
 		/**
@@ -924,9 +905,9 @@ public class SeleniumCore {
 		 * <p>
 		 * @param sLocator, an element locator identifying a frame or iframe
 		 */
-		public void selectFrame(String sLocator) {
-		
-				driver.switchTo().frame(sLocator);		
+		public void selectFrame(String sLocator)
+		{	
+			driver.switchTo().frame(sLocator);		
 		}
 
 		/**
@@ -935,10 +916,9 @@ public class SeleniumCore {
 		 * @param windowID, the JavaScript window ID of the window to select
 		 */
 
-		public void selectWindow(String windowID) {
-
-				driver.switchTo().window(windowID);		
-	
+		public void selectWindow(String windowID) 
+		{
+			driver.switchTo().window(windowID);		
 		}
 
 		/**
@@ -956,18 +936,19 @@ public class SeleniumCore {
 		 *            default Selenium timeout will be used. See the setTimeout()
 		 *            command
 		 */
-		public void waitForPopUp(String windowID, String timeout) {
-		
-				for(int iteration = 0; iteration < Integer.valueOf(timeout); iteration++)
-				{
-						
-					try{
-						for (String handle : driver.getWindowHandles()) {
-						     driver.switchTo().window(handle);} 
-						}
-					catch (Exception e){}
-					Platform.sleep(Log.giAutomationPause1TO);
-				}
+		public void waitForPopUp(String windowID, String timeout) 
+		{		
+			for(int iteration = 0; iteration < Integer.valueOf(timeout); iteration++)
+			{
+				try{
+						for (String handle : driver.getWindowHandles()) 
+						{
+							driver.switchTo().window(handle);
+						} 
+					}
+				catch (Exception e){}
+				Platform.sleep(Log.giAutomationPause1TO);
+			}
 		
 		}
 		
@@ -995,13 +976,13 @@ public class SeleniumCore {
 		 * @param sLocatoran element locator
 		 * @return true if the element is present, false otherwise
 		 */
-		public boolean waitForElementPresent(int iWait, String sLocator) {
-
+		public boolean waitForElementPresent(int iWait, String sLocator) 
+		{
 			boolean bElementPresent = false;
 
-				waitUntilVisible(sLocator, iWait);
+			waitUntilVisible(sLocator, iWait);
 				
-				return bElementPresent;
+			return bElementPresent;
 		}
 		
 			
@@ -1040,10 +1021,8 @@ public class SeleniumCore {
 		 */
 		public String getAttribute(String arg0)
 		{
-	
-				String[] splitString = arg0.split("~");
-				return driver.findElement(by(splitString[0])).getAttribute(splitString[1]);	//requires 2 args for WebDriver TBD
-
+			String[] splitString = arg0.split("~");
+			return driver.findElement(by(splitString[0])).getAttribute(splitString[1]);	//requires 2 args for WebDriver TBD
 		}
 
 		
@@ -1053,17 +1032,18 @@ public class SeleniumCore {
 		 */
 		public String[] getAllWindowIds()
 		{
-		String ls[];
-		int x =0;
+			String ls[];
+			int x =0;
 	
 			Set<String> handles = driver.getWindowHandles();
 			ls = new String[handles.size()];
-			for (String handle : handles) {
+			for (String handle : handles) 
+			{
 				ls[x]=handle;
 				x++;
 			}
 			return ls;
-			}
+		}
 		
 		
 		
@@ -1073,9 +1053,8 @@ public class SeleniumCore {
 		 */
 		public String getWindowId()
 		{
-		
-				String handle = driver.getWindowHandle();
-				return handle;
+			String handle = driver.getWindowHandle();
+			return handle;
 		}
 
 		
@@ -1086,17 +1065,18 @@ public class SeleniumCore {
 		 */
 		public String[] getAllWindowNames()
 		{
-		String ls[];
-		int x =0;
+			String ls[];
+			int x =0;
 		
 			Set<String> handles = driver.getWindowHandles();
 			ls = new String[handles.size()];
-			for (String handle : handles) {
+			for (String handle : handles)
+			{
 				ls[x]=driver.switchTo().window(handle).getTitle();
 				x++;
 			}
+			
 			return ls;
-	
 		}
 
 
@@ -1107,18 +1087,18 @@ public class SeleniumCore {
 		 */
 		public String[] getAllWindowTitles()
 		{
-		String ls[];
-		int x =0;
+			String ls[];
+			int x =0;
 		
 				Set<String> handles = driver.getWindowHandles();
 				ls = new String[handles.size()];
-				for (String handle : handles) {
+				for (String handle : handles)
+				{
 					ls[x]=driver.switchTo().window(handle).getTitle();
 					x++;
 				}
+				
 				return ls;
-			
-		
 		}
 	
 		
@@ -1157,9 +1137,7 @@ public class SeleniumCore {
 		 */
 		public void deleteCookie(String arg0, String arg1)
 		{
-		
-				driver.manage().deleteAllCookies();
-		
+			driver.manage().deleteAllCookies();
 		}
 
 
@@ -1168,9 +1146,7 @@ public class SeleniumCore {
 		 */
 		public void deleteAllVisibleCookies()
 		{
-		
-				driver.manage().deleteAllCookies();
-		
+			driver.manage().deleteAllCookies();
 		}	
 
 		/**
@@ -1178,9 +1154,7 @@ public class SeleniumCore {
 		 */
 		public String getCookie()
 		{
-			
-				return driver.manage().getCookies().toString();
-			
+			return driver.manage().getCookies().toString();
 		}
 
 
@@ -1190,9 +1164,7 @@ public class SeleniumCore {
 		 */
 		public String getConfirmation()
 		{
-		
-				return driver.switchTo().alert().getText();
-		
+			return driver.switchTo().alert().getText();
 		}
 
 		/**
@@ -1200,9 +1172,7 @@ public class SeleniumCore {
 		 */
 		public void chooseOkOnNextConfirmation()
 		{
-			
-				driver.switchTo().alert().accept();
-			
+			driver.switchTo().alert().accept();
 		}
 
 		/**
@@ -1210,9 +1180,7 @@ public class SeleniumCore {
 		 */
 		public void chooseCancelOnNextConfirmation()
 		{
-		
-				driver.switchTo().alert().dismiss();
-		
+			driver.switchTo().alert().dismiss();
 		}
 
 		
@@ -1225,12 +1193,11 @@ public class SeleniumCore {
 		* @param sLabel text item to deselect in the list box
 		* @throws Exception if option is not found
 		*/
-		public void deSelectByLabel(String sLocator, String sLabel) throws Exception {
-			
-				WebElement weListbox = driver.findElement(this.by(sLocator));
-				Select listbox = new Select(weListbox);
-				listbox.deselectByVisibleText(sLabel);
-			
+		public void deSelectByLabel(String sLocator, String sLabel) throws Exception 
+		{
+			WebElement weListbox = driver.findElement(by(sLocator));
+			Select listbox = new Select(weListbox);
+			listbox.deselectByVisibleText(sLabel);
 		}
 		
 		
@@ -1242,26 +1209,29 @@ public class SeleniumCore {
 		 * @param sLabel partial text of item to deselect in the list box
 		 * @throws Exception if item is not found
 		 */
-		public void deSelectByPartialLabel(String sLocator, String sLabel) throws Exception {
-			
-				WebElement weListbox = driver.findElement(this.by(sLocator));
-				Select listbox = new Select(weListbox);
-				List<WebElement> options = listbox.getOptions();
-				boolean bFound = false;
+		public void deSelectByPartialLabel(String sLocator, String sLabel) throws Exception 
+		{			
+			WebElement weListbox = driver.findElement(by(sLocator));
+			Select listbox = new Select(weListbox);
+			List<WebElement> options = listbox.getOptions();
+			boolean bFound = false;
 
-				for (WebElement option : options) {
-					if (option.getText().contains(sLabel.trim())) {
-						bFound = true;
-						String sOption = option.getText(); 
-						listbox.deselectByVisibleText(sOption);
-						break;
-					}
-				}
-
-				if (!bFound) {
-					throw new Exception("List option not found");
+			for (WebElement option : options)
+			{
+				if (option.getText().contains(sLabel.trim())) 
+				{
+					bFound = true;
+					String sOption = option.getText(); 
+					listbox.deselectByVisibleText(sOption);
+					break;
 				}
 			}
+
+			if (!bFound) 
+			{
+				throw new Exception("List option not found");
+			}
+		}
 			
 
 		
@@ -1275,12 +1245,11 @@ public class SeleniumCore {
 		* @param sValue Value to deselect in the list box
 		* @throws Exception if option is not found
 		*/
-		public void deSelectByValue(String sLocator, String sValue) throws Exception {
-			
-				WebElement weListbox = driver.findElement(this.by(sLocator));
-				Select listbox = new Select(weListbox);
-				listbox.deselectByValue(sValue);
-			
+		public void deSelectByValue(String sLocator, String sValue) throws Exception
+		{			
+			WebElement weListbox = driver.findElement(by(sLocator));
+			Select listbox = new Select(weListbox);
+			listbox.deselectByValue(sValue);
 		}
 		
 		
@@ -1292,13 +1261,11 @@ public class SeleniumCore {
 		* @param iIndex value to deselect in the list box
 		* @throws Exception if option is not found
 		*/
-		public void deSelectByIndex(String sLocator, int iIndex) throws Exception {
-			
-				WebElement weListbox = driver.findElement(this.by(sLocator));
-				Select listbox = new Select(weListbox);
-				listbox.deselectByIndex(iIndex);
-				
-		
+		public void deSelectByIndex(String sLocator, int iIndex) throws Exception 
+		{		
+			WebElement weListbox = driver.findElement(by(sLocator));
+			Select listbox = new Select(weListbox);
+			listbox.deselectByIndex(iIndex);
 		}
 		
 		
@@ -1309,23 +1276,24 @@ public class SeleniumCore {
 		* @param sLocator string used to locate the list widget
 		* @throws Exception if list object is not found
 		*/
-		public void deSelectAll(String sLocator) throws Exception {
-			
-				WebElement weListbox = driver.findElement(this.by(sLocator));
-				Select listbox = new Select(weListbox);
-				listbox.deselectAll();
-			
+		public void deSelectAll(String sLocator) throws Exception 
+		{	
+			WebElement weListbox = driver.findElement(by(sLocator));
+			Select listbox = new Select(weListbox);
+			listbox.deselectAll();
 		}
 		
 		/**
 		* Highlights the webelement 
 		* 
 		*/		
-		public void highlightElement(String sLocator) {
+		public void highlightElement(String sLocator) 
+		{
 			
 			waitForElementPresent(Log.giAutomationNormalTO,sLocator);
 			
-	        for (int i = 0; i <2; i++) {
+	        for (int i = 0; i <2; i++) 
+	        {
 	            JavascriptExecutor js = (JavascriptExecutor) driver;
 	            js.executeScript("arguments[0].style.border='4px groove green'", driver.findElement(by(sLocator)));
 	            js.executeScript("arguments[0].style.background='yellow'", driver.findElement(by(sLocator)));
@@ -1372,7 +1340,6 @@ public class SeleniumCore {
 	  {
 		 Actions builder = new Actions(driver);
 		 builder.keyDown(Keys.CONTROL).sendKeys(Keys.END).perform();
-		 
 	  }
 	 
 	 /**
@@ -1382,8 +1349,30 @@ public class SeleniumCore {
 	  {
 		 Actions builder = new Actions(driver);
 		 builder.keyDown(Keys.CONTROL).sendKeys(Keys.HOME).perform();
-		 
 	  }
+	 
+	 
+	 
+		public static void selectDate(String sLocator, String sDate) 
+		{ 
+		//	datePicker = driver.findElement.by("ui-datepicker-div"));
+			
+			WebElement datePicker = driver.findElement(by(sLocator));
+
+			List<WebElement> noOfColumns = datePicker.findElements(By.tagName("td")); 
+			
+			//Loop will rotate till expected date not found.
+			for (WebElement cell: noOfColumns)
+			{
+				//Select the date from date picker when condition match.
+				if (cell.getText().equals(sDate))
+				{
+					cell.findElement(By.linkText(sDate)).click(); 
+					
+					break; 
+				} 
+			} 
+		}
 	 
 		
 	 

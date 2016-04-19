@@ -4,11 +4,16 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
+
+import dummy.core.webwidgets.Button;
+import dummy.core.webwidgets.StaticText;
 
 /**
  * The DateTime class contains general date and time functions.
@@ -1399,6 +1404,138 @@ public class DateTime {
 
 	
     }
+    
+    List<String> monthList = Arrays.asList("January", "February", "March", "April", "May", "June","July", 
+			"August", "September", "October", "November", "December"); 
+	
+    // Expected Date, Month and Year 
+	int expMonth; 
+	int expYear; 
+	String expDate = null; 
+	
+	// Calendar Month and Year 
+	String calMonth = null; 
+	String calYear = null; 
+	boolean dateNotFound;
+	
+	
+	/**
+	 * Declaration for the Google main page Search button
+	 * @return Returns web UI object of specified type and definition 
+	 */
+	public static Button btnDatePicker() { 
+		return new Button("id=ui-datepicker-div");
+		
+	}
+	
+	/**
+	 * Declaration for the Google main page Search button
+	 * @return Returns web UI object of specified type and definition 
+	 */
+	public static Button btnNext() { 
+		return new Button("//a[@title='Next']");
+		
+	}
+	
+	/**
+	 * Declaration for the Google main page Search button
+	 * @return Returns web UI object of specified type and definition 
+	 */
+	public static Button btnPrevious() { 
+		return new Button("//a[@title='Prev']");
+		
+	}
+	
+	
+	/**
+	 * Declaration for the Google main page Search button
+	 * @return Returns web UI object of specified type and definition 
+	 */
+	public static Button btnDepartureDate() { 
+		return new Button("id=start_date_sec");
+		
+	}
+	
+	/**
+	 * Declaration for the Google main page Search button
+	 * @return Returns web UI object of specified type and definition 
+	 */
+	public static Button btnReturnDate() { 
+		return new Button("id=return_date_sec");
+		
+	}
+	
+	/**
+	 * Declaration for the Google main page Search button
+	 * @return Returns web UI object of specified type and definition 
+	 */
+	public static StaticText stMonth() { 
+		return new StaticText("className=ui-datepicker-month");
+		
+	}
+	
+	/**
+	 * Declaration for the Google main page Search button
+	 * @return Returns web UI object of specified type and definition 
+	 */
+	public static StaticText stYear() { 
+		return new StaticText("className=ui-datepicker-year");
+		
+	}
+
+	
+	public void pickExpDate(String sLocator) throws InterruptedException
+	{
+//		driver.get("http://www.makemytrip.com/flights"); 
+		
+		Browser.loadURL("http://www.makemytrip.com/flights");
+
+		//Click on date text box to open date picker popup. 
+		btnDepartureDate().click();
+		
+		dateNotFound = true; 
+		//Set your expected date, month and year. 
+		expDate = "18";
+		expMonth= 12; 
+		expYear = 2016; 
+
+		//This loop will be executed continuously till dateNotFound Is true. 
+		while(dateNotFound) 
+		{ 
+		  //Retrieve current selected month name from date picker popup. 
+		  //calMonth = driver.findElement(By.className("ui-datepicker-month")).getText(); 
+			calMonth = stMonth().getText();
+
+			//Retrieve current selected year name from date picker popup. 
+		//	calYear = driver.findElement(By.className("ui-datepicker-year")).getText(); 
+			calYear = stYear().getText();
+			
+			//If current selected month and year are same as expected month and year then go Inside this condition. 
+			if(monthList.indexOf(calMonth)+1 == expMonth && (expYear == Integer.parseInt(calYear)))
+			{ 
+				//Call selectDate function with date to select and set dateNotFound flag to false.
+		//		selectDate(expDate); 
+				SeleniumCore.seleniumHelper.selectDate(sLocator, expDate);
+				
+				dateNotFound = false; 
+			} 
+
+			//If current selected month and year are less than expected month and year then go Inside this condition. 
+			else if(monthList.indexOf(calMonth)+1 < expMonth && (expYear == Integer.parseInt(calYear)) || expYear > Integer.parseInt(calYear)) 
+			{ //Click on next button of date picker.
+				btnNext().click();
+			}
+			//If current selected month and year are greater than expected month and year then go Inside this condition.
+			else if(monthList.indexOf(calMonth)+1 > expMonth && (expYear == Integer.parseInt(calYear)) || expYear < Integer.parseInt(calYear)) 
+
+			{ //Click on previous button of date picker. 
+				btnPrevious().click();
+			} 
+		} Thread.sleep(3000);
+	} 
+    
+    
+    
     
     
    

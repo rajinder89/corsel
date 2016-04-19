@@ -16,7 +16,7 @@ import dummy.core.webwidgets.TextField;
  * This class contains definitions for all Google Main page UI objects like Search button
  * and search text field, etc. as well as methods to drive Google UI i.e. googleSearch() method
  * 
- * @author Tony Venditti
+ * @author 
  */
 public class GoogleMainPage {
 	
@@ -215,7 +215,7 @@ public class GoogleMainPage {
 	/**
 	 * Enters a search string in google search text field and clicks Search button
 	 * @param sSearchText - search text to enter into google search text field
-	 * @author Tony Venditti
+	 * @author 
 	 */
 	public static void googleSearch(String sSearchText){
 		tfSearchText().highlight();
@@ -227,7 +227,7 @@ public class GoogleMainPage {
 	
 	/**
 	 * Clicks Settings-Search Settings link to load Google Preferences page
-	 * @author Tony Venditti
+	 * @author 
 	 */
 	public static void loadPreferencesPage(){
 		lnkSettings().click();	//click Google Settings link to expose Search Settings drop down item

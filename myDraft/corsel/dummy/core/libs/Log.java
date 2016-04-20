@@ -13,33 +13,36 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 
-import javax.swing.JOptionPane;
-
 import dummy.core.webwidgets.VideoRecord;
 
-
-
 /**
-* The Log class Performs script initialization, termination and logging operations among many other functions. 
-* <p>
-* The log output is written simultaneously to a text file, the system console and to an HTML file.
-* The HTML result log displays results hierarchically with passes in green and fails in red for easy identification.
-* In order to implement the automation logging simply import the Log class in your test script and add the Log.initialize() and Log.terminate() methods
-* to your scripts setup and cleanup sections. Also, all test cases in your test section must be prefaced by the method Log.startTestcase(). 
-* All error handling should be done by the method Log.errorHandler().
-* <p>
-* The Automation Log class has an associated properties file called automation.properties.  Place the
-* automation.properties file in your client system's home directory. The home directory is usually the
-* c:\Users\<your name> folder. You can find out what your home directory is by executing
-* the following java command: 
-* <BR>
-* System.out.printn(Platform.getUserHome());
-* <BR> 
-* Edit the properties in the automation.properties file to represent your local system and automation settings.
-* If you do not have this file, the Log class will use default variables.
-*/
+ * The Log class Performs script initialization, termination and logging operations among many other functions. 
+ * 
+ * The log output is written simultaneously to a text file, the system console and to an HTML file.
+ * The HTML result log displays results hierarchically with passes in green and fails in red for easy identification.
+ * In order to implement the automation logging simply import the Log class in your test script and add the Log.initialize() and Log.terminate() methods
+ * to your scripts setup and cleanup sections. 
+ * Also, all test cases in your test section must be prefaced by the method Log.startTestcase(). 
+ * All error handling should be done by the method Log.errorHandler().
+ * 
+ * The Automation Log class has an associated properties file called automation.properties. 
+ * Place the automation.properties file in your client system's home directory. 
+ * The home directory is usually the c:\Users\<your name> folder. You can find out what your home directory is by executing
+ * the following java command: System.out.printn(Platform.getUserHome());
+ *
+ * Edit the properties in the automation.properties file to represent your local system and automation settings.
+ * If you do not have this file, the Log class will use default variables.
+ */
+
 public class Log
 {
+	
+	public static String sDQ = "\"";  //variable to simplify use of inserting double quote char in strings
+	public static String sSQ = "\'";  //variable to simplify use of inserting single quote char in strings
+	public static String sNL = "\n";  //variable to simplify use of inserting next line char in strings
+	public static String sTab = "\t"; //variable to simplify use of inserting a tab in a text string.
+	
+	
 	//Global Automation & System variables
 
 	/**Automation base path*/
@@ -56,40 +59,36 @@ public class Log
 
 	/**Global string for automation result directory*/
 	public static String gsAutomationAutoResultPath = Platform.getCurrentProjectPath() + "results" + Platform.getFileSeparator() ;
-	
+
 	/**Global string for automation result file suffix*/
 	public static String gsAutomationAutoResultFileSuffix = ".txt";
 
 	/**Global string for automation result image suffix*/
 	public static String gsAutomationAutoResultErrorImageSuffix = ".jpg";
-	
+
 	/**Global string for automation result video suffix*/
 	public static String gsAutomationAutoResultVideoSuffix = ".avi";
-	
+
 	/**Global string for automation Test Data Spreadsheet suffix*/
 	public static String gsAutomationTestDataSpreadsheetSuffix=".xls";
-	
+
 	/**Global string for old Excel .xls file extension*/
 	public static String gsAutomationExcelXLSExt=".xls";
-	
+
 	/**Global string for Google Excel .xlsx file extension*/
 	public static String gsAutomationExcelXLSXExt=".xlsx";
 
 	/**Global string for automation support documents path*/
 	public static String gsAutomationAutoSupportDocs = (gsAutomationAutoPath + Platform.getFileSeparator());
-	
+
 	/**Global strings for Browser Profile file*/
 	public static String gsAutomationBrowserProfile;
-	
+
 	/**Global strings for Browser Path*/
 	public static String gsAutomationBrowserPath;
 
-
-	/**Global string for test server URL*/
-	public static String gsAutomationBaseURL = "about:blank";
-
 	/**Global string for test browser*/
-	public static String gsAutomationTestBrowser; // = "Internet Explorer 6.0";
+	public static String gsAutomationTestBrowser; 
 
 	//Global time-out variables
 
@@ -151,21 +150,18 @@ public class Log
 
 	/**Global default Image capture output option*/
 	public static boolean gbAutomationImageCapture = false;
-	
+
 	/**Global default Error Handling Stack Trace output Option*/
 	public static boolean gbAutomationStackTrace = true;
 
 	/**Global default Error Handling Image capture output option*/
 	public static boolean gbAutomationErrorImageCapture = true;
-	
+
 	/**Global default Video capture output option*/
 	public static boolean gbAutomationVideoCapture = false;
-	
+
 	/**Global default Close browsers upon test script completion option*/
 	public static boolean gbAutomationCloseTestBrowserAtScriptCompletion = true;
-	
-
-
 
 	//Global testcase logging information
 
@@ -219,7 +215,7 @@ public class Log
 
 	/**Global string for Total Script header*/
 	public static String gsTestcaseFooter="* Testcases Executed:";
-	
+
 
 	//Global script header information
 
@@ -241,7 +237,7 @@ public class Log
 
 	/**Automation html formatted result file name*/
 	public static String gsHtmlResultFileName = "auto_report";
-	
+
 	/**Global long for script start time*/
 	public static long glStartTime = 0;
 
@@ -254,17 +250,11 @@ public class Log
 	/**Global string for automation suite result file*/
 	public static String gsSuiteResultFile = null;
 
-	/**Global string for default Browser Title*/
-	public static String gsAutomationBrowserBaseStatePage = "about:blank";
-
 	/** Global variable to store Test Suite Start time*/
 	public static String gsSuiteStartTime;
 
 	/**Global boolean for tracking if suite or script is running*/
 	public static boolean gbIsSuite = false;
-
-	/**Global string for tracking if suite or script is running*/
-	public static String gsAutomationResultViewerApp;
 
 	/**Global string for image marker in log output.*/
 	public static String gsImageMarker = "Image Saved to: ";
@@ -274,7 +264,7 @@ public class Log
 
 	/**Global string for PASS item in pass/fail portion of log output.*/
 	public static String gsPass = "PASS - ";
-	
+
 	/** Global string for passed test case footer */
 	public static String gsTestcasePassFooter = "Testcase - " + gsPass;
 
@@ -314,60 +304,55 @@ public class Log
 	 */
 	public Log(String sAuthor, String sScriptDescription, String sTestArea)
 	{
-	//assign script variables
-	gsScriptAuthor = sAuthor;
-	gsScriptDescription = sScriptDescription;
-	gsScriptTestArea = sTestArea;
+		//assign script variables
+		gsScriptAuthor = sAuthor;
+		gsScriptDescription = sScriptDescription;
+		gsScriptTestArea = sTestArea;
 	}
 
 	/**
 	 * Initializes test script and system variables at script startup
 	 */
-	public static void initialize()
-	{		
-		//initialize automation global variables 
+	public static void initialize() {		
+		//Initialize automation global variables 
 		try {
-				autoSetup(true);
-			} catch (Exception e) {
+			autoSetup(true);
+		} catch (Exception e) {
 			errorHandler("Error occurred at script initialization", e);
 		}
-		
 	}
 
-	
+
 	/**
 	 * Executes script cleanup and test metric gathering functions upon script termination
 	 */
-	public static void terminate()
-	{
-
+	public static void terminate() {
 		try{
 			//if option is true then close test browsers otherwise leave browsers up
 			if (Log.gbAutomationCloseTestBrowserAtScriptCompletion == true){
 				Browser.close();
-		
-				}
-		//Get test metrics and report results
-		autoCleanup(true);
-		
-		//Stop the video recording
-		if (gbAutomationVideoCapture == true){
-			VideoRecord.stopRecording();
-			
+
 			}
-	}
+			//Get test metrics and report results
+			autoCleanup(true);
+
+			//Stop the video recording
+			if (gbAutomationVideoCapture == true){
+				VideoRecord.stopRecording();
+
+			}
+		}
 		catch(Exception e)
-			{
+		{
 			errorHandler("Error occurred at script termination",e);
-			}
+		}
 	}
 
 	/**
 	 * Returns script name
 	 * @return script name
 	 */
-	public static String getScriptName()
-	{
+	public static String getScriptName() {
 		return gsScriptName;	
 	}
 
@@ -375,33 +360,27 @@ public class Log
 	 * Sets the script name
 	 * @param sName script name
 	 */
-	public static void setScriptName(String sName)
-	{
+	public static void setScriptName(String sName) {
 		gsScriptName = sName;
 	}
 
-
 	/**
-	* Sets up, initializes automation environment and logs script header info
-	* <P>
-	* @param bShowHeaderInfo	true displays script header information, false does not display script header information
-	 * @throws Exception 
-	*/
-	public static void autoSetup(boolean bShowHeaderInfo)
-	{
-		
+	 * Sets up, initializes automation environment and logs script header info
+	 * @param bShowHeaderInfo	true displays script header information, false does not display script header information
+	 */
+	public static void autoSetup(boolean bShowHeaderInfo) {
+
 		if (getScriptName() == null)
 		{
 			try
 			{
 				setScriptName(gsScriptName);
 			}
-			catch(Exception e) //in case the calling script doesn't have a matching script definition in the resources directory for some reason, just bail
+			catch(Exception e)
 			{
 				//noop
 			}
 		}
-
 
 		giScriptCounter=1;
 
@@ -409,10 +388,9 @@ public class Log
 		DateFormat dtformat = DateFormat.getDateInstance();
 		DateFormat tmformat = DateFormat.getTimeInstance();
 
-
 		//Get system specific global variables
 		loadAutoPropSettings(gsAutoPropFile);
-		
+
 		//create unique result file based on script name and date
 		gsResultFile = gsAutomationAutoResultPath + gsScriptName + "_" + DateTime.genDateBasedRandVal() + gsAutomationAutoResultFileSuffix;
 		FileIO.writeFileContentsByUTF8(gsResultFile, "");
@@ -422,9 +400,8 @@ public class Log
 
 		//set the current browser
 		try{
-				SeleniumCore.setCurrentBrowser(gsAutomationTestBrowser);
-
-			}
+			SeleniumCore.setCurrentBrowser(gsAutomationTestBrowser);
+		}
 		catch(Exception e)
 		{
 			SeleniumCore.setCurrentBrowser(gsAutomationTestBrowser);
@@ -458,7 +435,6 @@ public class Log
 		//Start script clock
 		setStartTime();
 
-
 		//Clear giScriptPassedCounter
 		giScriptPassedCounter = 0;
 
@@ -483,68 +459,63 @@ public class Log
 		//Clear test action counter
 		giTestActionCounter = 0;
 
-
 		//Start the video recording
-				if (gbAutomationVideoCapture == true){
-					VideoRecord.startRecording();
-				}
+		if (gbAutomationVideoCapture == true){
+			VideoRecord.startRecording();
+		}
 	}
 
 
-
 	/**
-	* Logs script information to multiple output sources. Must explicitly state which log format type to use. Writes info to log in any of a number of specified formats <p>
-	* <p>
-	* @param sLog Log message
-	* @param iType type of log information (i.e. 1=PASS/FAIL, 2=SCRIPT OUTPUT, etc.)
-	*/
-	public static void logScriptInfo(String sLog, int iType)
-	{
+	 * Logs script information to multiple output sources. Must explicitly state which log format type to use. Writes info to log in any of a number of specified formats <p>
+	 * @param sLog Log message
+	 * @param iType type of log information (i.e. 1=PASS/FAIL, 2=SCRIPT OUTPUT, etc.)
+	 */
+	public static void logScriptInfo(String sLog, int iType) {
 
 		//Overloaded to explicitly state which log format type to use. Writes info to log in any of a number of specified formats
 		DateFormat tmformat = DateFormat.getTimeInstance();
 		String s = "";
 
-		switch (iType)
-		{
-			case LOGTYPE_APPEND_INVOCATION: // Verbose - append invocation information
-				s = tmformat.format(new Date()) + " - " + DateTime.getElapsedTime(glStartTime) + " - " + gsPass + sLog; //format
-				giTestActionCounter++; //add one to test action counter
-				break;
-			case LOGTYPE_TIME_PASS_FAIL : //Verbose - PASS-FAIL format output
-				s = tmformat.format(new Date()) + " - " + DateTime.getElapsedTime(glStartTime) + " - " + gsPass + sLog; //format
-				giTestActionCounter++; //add one to test action counter
-				break;
-			case LOGTYPE_SCRIPT_OUTPUT : //Verbose - Manual script format output
-				s = "[ ] - " + sLog; //format
-				giTestActionCounter++; //add one to test action counter
-				break;
-			case LOGTYPE_SIMPLE : //Verbose - Log only what is entered
-				s = sLog;
-				break;
-			case LOGTYPE_NONE : //Do NOT log actions info to log file
-				break;
-			case LOGTYPE_ERROR_OUTPUT :
-				s = sLog;
-				System.err.println(s);
-				appendContentToResultFile(s); // txt log
-				break;
-			case LOGTYPE_DEBUG_INFO :
-				s = tmformat.format(new Date()) + " - " + DateTime.getElapsedTime(glStartTime) + " - " + gsDebug + sLog; //format
-				break;
+		switch (iType) {
+		case LOGTYPE_APPEND_INVOCATION: // Verbose - append invocation information
+			s = tmformat.format(new Date()) + " - " + DateTime.getElapsedTime(glStartTime) + " - " + gsPass + sLog; //format
+			giTestActionCounter++; //add one to test action counter
+			break;
+		case LOGTYPE_TIME_PASS_FAIL : //Verbose - PASS-FAIL format output
+			s = tmformat.format(new Date()) + " - " + DateTime.getElapsedTime(glStartTime) + " - " + gsPass + sLog; //format
+			giTestActionCounter++; //add one to test action counter
+			break;
+		case LOGTYPE_SCRIPT_OUTPUT : //Verbose - Manual script format output
+			s = "[ ] - " + sLog; //format
+			giTestActionCounter++; //add one to test action counter
+			break;
+		case LOGTYPE_SIMPLE : //Verbose - Log only what is entered
+			s = sLog;
+			break;
+		case LOGTYPE_NONE : //Do NOT log actions info to log file
+			break;
+		case LOGTYPE_ERROR_OUTPUT :
+			s = sLog;
+			System.err.println(s);
+			appendContentToResultFile(s); // txt log
+			break;
+		case LOGTYPE_DEBUG_INFO :
+			s = tmformat.format(new Date()) + " - " + DateTime.getElapsedTime(glStartTime) + " - " + gsDebug + sLog; //format
+			break;
 			// Real time log implementation items
-			case LOGTYPE_HTML:
-				s = sLog;
-				break;
-			case LOGTYPE_FAIL:
-				s = tmformat.format(new Date()) + " - "
+		case LOGTYPE_HTML:
+			s = sLog;
+			break;
+		case LOGTYPE_FAIL:
+			s = tmformat.format(new Date()) + " - "
 					+ DateTime.getElapsedTime(glStartTime) + " - " + gsFail + sLog; // format
-				giTestActionCounter++; // add one to test action counter
-				break;
+			giTestActionCounter++; // add one to test action counter
+			break;
 
 		}
-		
-		
+
+
 		//abort script, set fail vars
 		if(s.endsWith(gsAbortSign)){
 			if(giTestCaseCounter>0) gbTestCaseFailed = true;
@@ -576,14 +547,13 @@ public class Log
 		try{
 			// To avoid previous image file form being over written, use DateTime.getFormattedDateTime(new Date().getTime(), "MMddHHmmssSSS") not genDateBasedRandVal().
 			String fileName = gsAutomationAutoResultPath + gsScriptName + "_" + DateTime.getFormattedDateTime(new Date().getTime(), "MMddHHmmssSSS") + gsAutomationAutoResultErrorImageSuffix;
-			
+
 			//add description in log for captured image
 			if (bError == false){
 				if (description != null){ 
 					logScriptInfo("Image Description: " + description);}
 			}
-			
-			
+
 			Images.captureScreen(gsScriptName, description, fileName, bError);
 			logScriptInfo(gsImageMarker + fileName, bError?LOGTYPE_ERROR_OUTPUT:LOGTYPE_TIME_PASS_FAIL);			
 		}catch(Exception e){
@@ -597,7 +567,7 @@ public class Log
 	 * log screen snapshot with description. used for normal purpose.
 	 * @param description of screen snapshot.
 	 */
-	public static void logScreenCapture(String description){
+	public static void logScreenCapture(String description) {
 		logScreenCapture(description,false);
 	}
 
@@ -605,58 +575,53 @@ public class Log
 	/**
 	 * log screen snapshot without description
 	 */
-	public static void logScreenCapture(){
+	public static void logScreenCapture() {
 		logScreenCapture(null,false);
 	}
 
 
 	/**
-	* Logs script information to multiple output sources. Overloaded to simplify to single parameter.
-	* Forces use of global Log Type giAutomationLogType parameter.
-	* @param sLog log message
-	*/
-	public static void logScriptInfo(String sLog)
-	{
-	//Overloaded to simplify to single parameter. Forces use of global Log Type giAutomationLogType parameter for Log formatting.
-	logScriptInfo(sLog,giAutomationLogType);
+	 * Logs script information to multiple output sources. Overloaded to simplify to single parameter.
+	 * Forces use of global Log Type giAutomationLogType parameter.
+	 * @param sLog log message
+	 */
+	public static void logScriptInfo(String sLog) {
+		//Overloaded to simplify to single parameter. Forces use of global Log Type giAutomationLogType parameter for Log formatting.
+		logScriptInfo(sLog,giAutomationLogType);
 	}
 
 
 	/**
-	* Logs debug script information to multiple output sources.
-	* Forces use of global Log Type giAutomationLogType parameter set to #6 (equals debug info).
-	* @param sLog log message
-	*/
-	public static void logDebugInfo(String sLog)
-	{
-	//Forces use of Debug Log Type giAutomationLogType parameter for Logging of debug info.
-	if (giAutomationLogType == 6)
-		logScriptInfo(sLog,6);
+	 * Logs debug script information to multiple output sources.
+	 * Forces use of global Log Type giAutomationLogType parameter set to #6 (equals debug info).
+	 * @param sLog log message
+	 */
+	public static void logDebugInfo(String sLog) {
+		//Forces use of Debug Log Type giAutomationLogType parameter for Logging of debug info.
+		if (giAutomationLogType == 6)
+			logScriptInfo(sLog,6);
 	}
 
 	/**
-	* Sets script clock start time - by default this is started automatically at script startup when the
-	* autoSetup() function is used. The function sets a global variable called glStartTime which is then
-	* used as an argument to the getElapsedTime(glStartTime) function which is called in the logScriptInfo() function   <p>
-	*/
-	public static void setStartTime()
-	{
+	 * Sets script clock start time - by default this is started automatically at script startup when the
+	 * autoSetup() function is used. The function sets a global variable called glStartTime which is then
+	 * used as an argument to the getElapsedTime(glStartTime) function which is called in the logScriptInfo() function   <p>
+	 */
+	public static void setStartTime() {
 		long lTime = System.currentTimeMillis();
 		glStartTime = lTime;
 	}
 
 	/**
-	* Logs script testcase information and other metrics info <p>
-	* @param bShowResultFooter true to show result metrics in the footer section of the log results
-	 * @throws Exception 
-	*/
-	public static void autoCleanup(boolean bShowResultFooter)
-	{
+	 * Logs script testcase information and other metrics info <p>
+	 * @param bShowResultFooter true to show result metrics in the footer section of the log results
+	 */
+	public static void autoCleanup(boolean bShowResultFooter) {
 		// Check if script contained any failures
 		if (gbTestCaseFailed == true) {
 			giTestCaseFailCounter++;
 
-			}
+		}
 
 		if (gbScriptFailed == false)
 		{
@@ -667,7 +632,6 @@ public class Log
 			giScriptFailedCounter=1;
 			giScriptPassedCounter=0;
 		}
-
 
 		int iTestCasePassedCounter;
 
@@ -680,176 +644,159 @@ public class Log
 
 		if (bShowResultFooter)
 		{
-		//calculate percentages
-		double dPrctPassed = (int)(((double) iTestCasePassedCounter / (double) giTestCaseCounter) * 10000)/100.0;
-		double dPrctFailed = (int)(((double) giTestCaseFailCounter / (double) giTestCaseCounter) * 10000)/100.0;
+			//calculate percentages
+			double dPrctPassed = (int)(((double) iTestCasePassedCounter / (double) giTestCaseCounter) * 10000)/100.0;
+			double dPrctFailed = (int)(((double) giTestCaseFailCounter / (double) giTestCaseCounter) * 10000)/100.0;
 
-		//store elapsed time
-		String sElapsedTime = DateTime.getElapsedTime(glStartTime);
-		long lElapsedTime = DateTime.getElapsedTimeLong(glStartTime);
-		
-		DateFormat dtformat = DateFormat.getDateInstance();
-		DateFormat tmformat = DateFormat.getTimeInstance();
-		
-		//Write Script Testcase Information to result log
-		logScriptInfo("******************************************************************************", 3);
-		logScriptInfo("* Testcases Executed:              " + giTestCaseCounter, 3);
-		logScriptInfo("* Testcases Passed:                " + iTestCasePassedCounter, 3);
-		logScriptInfo("* Testcases Failed:                " + giTestCaseFailCounter, 3);
-		logScriptInfo("* Percent Testcases Passed:        " + dPrctPassed + "%", 3);
-		logScriptInfo("* Percent Testcases Failed:        " + dPrctFailed + "%", 3);
-		logScriptInfo("* Number of Test Actions Executed: " + giTestActionCounter, 3);
-		logScriptInfo("* Number of Errors found:          " + giErrorCounter, 3);
-		logScriptInfo("* End Date and Time:               " + dtformat.format(new Date()) + " " + tmformat.format(new Date()),3);
-		logScriptInfo("* Elapsed Time:                    " + sElapsedTime, 3);
-		logScriptInfo("******************************************************************************", 3);
+			//store elapsed time
+			String sElapsedTime = DateTime.getElapsedTime(glStartTime);
+			long lElapsedTime = DateTime.getElapsedTimeLong(glStartTime);
 
-		
-		//open temporary file to tally test statistics for suite results
-		String sTmp;
-		int inScriptCounter = 0;
-		int inScriptPassedCounter = 0;
-		int inScriptFailedCounter = 0;
+			DateFormat dtformat = DateFormat.getDateInstance();
+			DateFormat tmformat = DateFormat.getTimeInstance();
 
-		int inTestCaseCounter = 0;
-		int inTestCasePassedCounter = 0;
-		int inTestCaseFailCounter = 0;
-		int inTestActionCounter = 0;
-		int inErrorCounter = 0;
-		long inElapsedTime = 0;
-
-		try
-		{
-			FileInputStream in = new FileInputStream(gsSuiteStatFile);
-			Properties settings = new Properties();
-			settings.load(in);
-
-			sTmp = settings.getProperty("ScriptCounter");
-			inScriptCounter = Integer.parseInt(sTmp);
-
-			sTmp = settings.getProperty("ScriptPassedCounter");
-			inScriptPassedCounter = Integer.parseInt(sTmp);
-
-			sTmp = settings.getProperty("ScriptFailedCounter");
-			inScriptFailedCounter = Integer.parseInt(sTmp);
-
-			sTmp = settings.getProperty("ScriptPrctPassed");
-			//inScriptPrctPassed = Double.parseDouble(sTmp);
-
-			sTmp = settings.getProperty("ScriptPrctFailed");
-			//inScriptPrctFailed = Double.parseDouble(sTmp);
+			//Write Script Testcase Information to result log
+			logScriptInfo("******************************************************************************", 3);
+			logScriptInfo("* Testcases Executed:              " + giTestCaseCounter, 3);
+			logScriptInfo("* Testcases Passed:                " + iTestCasePassedCounter, 3);
+			logScriptInfo("* Testcases Failed:                " + giTestCaseFailCounter, 3);
+			logScriptInfo("* Percent Testcases Passed:        " + dPrctPassed + "%", 3);
+			logScriptInfo("* Percent Testcases Failed:        " + dPrctFailed + "%", 3);
+			logScriptInfo("* Number of Test Actions Executed: " + giTestActionCounter, 3);
+			logScriptInfo("* Number of Errors found:          " + giErrorCounter, 3);
+			logScriptInfo("* End Date and Time:               " + dtformat.format(new Date()) + " " + tmformat.format(new Date()),3);
+			logScriptInfo("* Elapsed Time:                    " + sElapsedTime, 3);
+			logScriptInfo("******************************************************************************", 3);
 
 
-			sTmp = settings.getProperty("TestCaseCounter");
-			inTestCaseCounter = Integer.parseInt(sTmp);
+			//open temporary file to tally test statistics for suite results
+			String sTmp;
+			int inScriptCounter = 0;
+			int inScriptPassedCounter = 0;
+			int inScriptFailedCounter = 0;
 
-			sTmp = settings.getProperty("TestCasePassedCounter");
-			inTestCasePassedCounter = Integer.parseInt(sTmp);
+			int inTestCaseCounter = 0;
+			int inTestCasePassedCounter = 0;
+			int inTestCaseFailCounter = 0;
+			int inTestActionCounter = 0;
+			int inErrorCounter = 0;
+			long inElapsedTime = 0;
 
-			sTmp = settings.getProperty("TestCaseFailCounter");
-			inTestCaseFailCounter = Integer.parseInt(sTmp);
-
-			sTmp = settings.getProperty("PrctPassed");
-			//inPrctPassed = Double.parseDouble(sTmp);
-
-			sTmp = settings.getProperty("PrctFailed");
-			//inPrctFailed = Double.parseDouble(sTmp);
-
-			sTmp = settings.getProperty("TestActionCounter");
-			inTestActionCounter = Integer.parseInt(sTmp);
-
-			sTmp = settings.getProperty("ErrorCounter");
-			inErrorCounter = Integer.parseInt(sTmp);
-
-			sTmp = settings.getProperty("ElapsedTime");
-			inElapsedTime = Long.parseLong(sTmp);
-
-			in.close();
-		}
-		catch (Exception e)
-		{
-			// commenting this out as the next code will create the file...
-			//logScriptInfo("Error loading suite statistic INI variables in file: " + gsSuiteStatFile, 5);
-		}
-
-		//tally and update suite statistics file
-		try
-		{
-			FileOutputStream out = new FileOutputStream(gsSuiteStatFile);
-			Properties settings = new Properties();
-
-			settings.put("ScriptCounter", String.valueOf(inScriptCounter + 1));
-			settings.put("ScriptPassedCounter", String.valueOf(inScriptPassedCounter + giScriptPassedCounter));
-			settings.put("ScriptFailedCounter", String.valueOf(inScriptFailedCounter + giScriptFailedCounter));
-			settings.put("ScriptPrctPassed", String.valueOf((int)((((double) inScriptPassedCounter + (double) giScriptPassedCounter) / ((double) inScriptCounter + (double) giScriptCounter)) * 10000)/100.0));
-			settings.put("ScriptPrctFailed", String.valueOf((int)((((double) inScriptFailedCounter + (double) giScriptFailedCounter) / ((double) inScriptCounter + (double) giScriptCounter)) * 10000)/100.0));
-
-			settings.put("TestCaseCounter", String.valueOf(inTestCaseCounter + giTestCaseCounter));
-			settings.put("TestCasePassedCounter", String.valueOf(inTestCasePassedCounter + iTestCasePassedCounter));
-			settings.put("TestCaseFailCounter", String.valueOf(inTestCaseFailCounter + giTestCaseFailCounter));
-			settings.put("PrctPassed", String.valueOf((int)((((double) inTestCasePassedCounter + (double) iTestCasePassedCounter) / ((double) inTestCaseCounter + (double) giTestCaseCounter)) * 10000)/100.0));
-			settings.put("PrctFailed", String.valueOf((int)((((double) inTestCaseFailCounter + (double) giTestCaseFailCounter) / ((double) inTestCaseCounter + (double) giTestCaseCounter)) * 10000)/100.0));
-			settings.put("TestActionCounter", String.valueOf(inTestActionCounter + giTestActionCounter));
-			settings.put("ErrorCounter", String.valueOf(inErrorCounter + giErrorCounter));
-			settings.put("ElapsedTime", String.valueOf(inElapsedTime + lElapsedTime));
-
-			//Close out properties file
-			settings.store(out, "");
-			out.close();
-
-		}
-		catch (IOException ioe)
-		{
-			logScriptInfo("Error saving suite statistic property variables in file: " + gsSuiteStatFile, 5);
-		}
-
-		//append results to suite
-		if (gsSuiteResultFile != null)
-		{
-			gsPassFailFile = gsAutomationAutoResultPath + gsHtmlResultFileName;
-			writePassFailResultsToHtmlFormat(gsSuiteResultFile,gsPassFailFile);
-
-		}
-		else{
-		//write out HTML formatted suite results file
-		gsPassFailFile = gsAutomationAutoResultPath + gsHtmlResultFileName;
-		writePassFailResultsToHtmlFormat(gsResultFile, gsPassFailFile);
-
-		}
-
-		//display log results in specified Viewer when test script completes
-		if (gbIsSuite == false)	//if script is part of suite execution do not display viewer
+			try
 			{
-			if (gsAutomationResultViewerApp != null)
-				try{
-					String[] lsViewer = new String[] {gsAutomationResultViewerApp,gsAutomationAutoResultPath+"auto_report_details.htm"};
-					//System.out.println(lsViewer[0]);
-					//System.out.println(lsViewer[1]);
-					Runtime.getRuntime().exec(lsViewer);
-					}
-					catch(Exception e){
-						System.err.println("Error loading alternative Result Viewer application");
-						e.printStackTrace();
-						
-					}
+				FileInputStream in = new FileInputStream(gsSuiteStatFile);
+				Properties settings = new Properties();
+				settings.load(in);
+
+				sTmp = settings.getProperty("ScriptCounter");
+				inScriptCounter = Integer.parseInt(sTmp);
+
+				sTmp = settings.getProperty("ScriptPassedCounter");
+				inScriptPassedCounter = Integer.parseInt(sTmp);
+
+				sTmp = settings.getProperty("ScriptFailedCounter");
+				inScriptFailedCounter = Integer.parseInt(sTmp);
+
+				sTmp = settings.getProperty("ScriptPrctPassed");
+				//inScriptPrctPassed = Double.parseDouble(sTmp);
+
+				sTmp = settings.getProperty("ScriptPrctFailed");
+				//inScriptPrctFailed = Double.parseDouble(sTmp);
+
+
+				sTmp = settings.getProperty("TestCaseCounter");
+				inTestCaseCounter = Integer.parseInt(sTmp);
+
+				sTmp = settings.getProperty("TestCasePassedCounter");
+				inTestCasePassedCounter = Integer.parseInt(sTmp);
+
+				sTmp = settings.getProperty("TestCaseFailCounter");
+				inTestCaseFailCounter = Integer.parseInt(sTmp);
+
+				sTmp = settings.getProperty("PrctPassed");
+				//inPrctPassed = Double.parseDouble(sTmp);
+
+				sTmp = settings.getProperty("PrctFailed");
+				//inPrctFailed = Double.parseDouble(sTmp);
+
+				sTmp = settings.getProperty("TestActionCounter");
+				inTestActionCounter = Integer.parseInt(sTmp);
+
+				sTmp = settings.getProperty("ErrorCounter");
+				inErrorCounter = Integer.parseInt(sTmp);
+
+				sTmp = settings.getProperty("ElapsedTime");
+				inElapsedTime = Long.parseLong(sTmp);
+
+				in.close();
+			}
+			catch (Exception e)
+			{
+				// commenting this out as the next code will create the file...
+				//logScriptInfo("Error loading suite statistic INI variables in file: " + gsSuiteStatFile, 5);
 			}
 
+			//tally and update suite statistics file
+			try
+			{
+				FileOutputStream out = new FileOutputStream(gsSuiteStatFile);
+				Properties settings = new Properties();
+
+				settings.put("ScriptCounter", String.valueOf(inScriptCounter + 1));
+				settings.put("ScriptPassedCounter", String.valueOf(inScriptPassedCounter + giScriptPassedCounter));
+				settings.put("ScriptFailedCounter", String.valueOf(inScriptFailedCounter + giScriptFailedCounter));
+				settings.put("ScriptPrctPassed", String.valueOf((int)((((double) inScriptPassedCounter + (double) giScriptPassedCounter) / ((double) inScriptCounter + (double) giScriptCounter)) * 10000)/100.0));
+				settings.put("ScriptPrctFailed", String.valueOf((int)((((double) inScriptFailedCounter + (double) giScriptFailedCounter) / ((double) inScriptCounter + (double) giScriptCounter)) * 10000)/100.0));
+
+				settings.put("TestCaseCounter", String.valueOf(inTestCaseCounter + giTestCaseCounter));
+				settings.put("TestCasePassedCounter", String.valueOf(inTestCasePassedCounter + iTestCasePassedCounter));
+				settings.put("TestCaseFailCounter", String.valueOf(inTestCaseFailCounter + giTestCaseFailCounter));
+				settings.put("PrctPassed", String.valueOf((int)((((double) inTestCasePassedCounter + (double) iTestCasePassedCounter) / ((double) inTestCaseCounter + (double) giTestCaseCounter)) * 10000)/100.0));
+				settings.put("PrctFailed", String.valueOf((int)((((double) inTestCaseFailCounter + (double) giTestCaseFailCounter) / ((double) inTestCaseCounter + (double) giTestCaseCounter)) * 10000)/100.0));
+				settings.put("TestActionCounter", String.valueOf(inTestActionCounter + giTestActionCounter));
+				settings.put("ErrorCounter", String.valueOf(inErrorCounter + giErrorCounter));
+				settings.put("ElapsedTime", String.valueOf(inElapsedTime + lElapsedTime));
+
+				//Close out properties file
+				settings.store(out, "");
+				out.close();
+
+			}
+			catch (IOException ioe)
+			{
+				logScriptInfo("Error saving suite statistic property variables in file: " + gsSuiteStatFile, 5);
+			}
+
+			//append results to suite
+			if (gsSuiteResultFile != null)
+			{
+				gsPassFailFile = gsAutomationAutoResultPath + gsHtmlResultFileName;
+				writePassFailResultsToHtmlFormat(gsSuiteResultFile,gsPassFailFile);
+
+			}
+			else{
+				//write out HTML formatted suite results file
+				gsPassFailFile = gsAutomationAutoResultPath + gsHtmlResultFileName;
+				writePassFailResultsToHtmlFormat(gsResultFile, gsPassFailFile);
+
+			}
+	
 		}
 
 	}
 
-	
+
 	/**
-	* Logs and tracks testcase information <p>
-	* @param sDesc Description of testcase
+	 * Logs and tracks testcase information <p>
+	 * @param sDesc Description of testcase
 	 * @throws Exception 
-	*/
+	 */
 	public static void startTestCase(String sDesc) throws Exception
 	{
 		//calculate any previous pass-fail metrics
 		autoCleanup(false);
-		
-		
+
+
 		//Take screenshot if gbAutomationImageCapture=true
 		if (gbAutomationImageCapture){
 			Log.logScreenCapture();
@@ -870,33 +817,33 @@ public class Log
 		//reset testcase failed to false
 		gbTestCaseFailed = false;
 		//System.out.println(gbTestCaseFailed);
-		
-		
-		
+
+
+
 	}
 
 	/**
-	* Dumps non-exception based error information out to console, text result and HTML result logs together with screen capture if 
-	* screen capture in automation log is set to true <p>
-	* @param sLog The error description text to write out to the log file
-	* @return
-	*/
+	 * Dumps non-exception based error information out to console, text result and HTML result logs together with screen capture if 
+	 * screen capture in automation log is set to true <p>
+	 * @param sLog The error description text to write out to the log file
+	 * @return
+	 */
 	public static void errorHandler(String sLog)
 	{
 		errorHandler (sLog,null);
 	}
-	
+
 
 	/**
-	* errorHandler function Dumps exception based error information out to console, text result and HTML result logs <p>
-	* @param sLog The text you want to write out to the log file
-	* @param e Exception error info
-	*/
+	 * errorHandler function Dumps exception based error information out to console, text result and HTML result logs <p>
+	 * @param sLog The text you want to write out to the log file
+	 * @param e Exception error info
+	 */
 	public static void errorHandler(String sLog, Exception e)
 	{
 
 		DateFormat tmformat = DateFormat.getTimeInstance();
-		
+
 		//spacer
 		logScriptInfo("", 3);
 
@@ -906,8 +853,8 @@ public class Log
 		giTestActionCounter++; //add one to test action counter
 		// append content to result file.
 		appendContentToResultFile(s);
-		
-		
+
+
 		//Add 1 to error counter and set testcase and script failed booleans to true
 		giErrorCounter++;
 		if(giTestCaseCounter > 0){
@@ -926,8 +873,8 @@ public class Log
 			System.err.println(e.getMessage());
 		}
 		logScriptInfo(getStackTrace(e), 5);
-		
-		
+
+
 		//Get screen bitmap
 		if (gbAutomationErrorImageCapture == true)
 		{
@@ -940,12 +887,11 @@ public class Log
 	}
 
 	/**
-	* Gets stack trace information and returns it as a string <p>
-	* @param e Exception
-	* @return String containing stack trace
-	*/
-	public static String getStackTrace(Exception e)
-	{
+	 * Gets stack trace information and returns it as a string <p>
+	 * @param e Exception
+	 * @return String containing stack trace
+	 */
+	public static String getStackTrace(Exception e) {
 		if (e == null)
 		{
 			Exception f = new Exception();
@@ -961,13 +907,11 @@ public class Log
 		return sw.toString();
 	}
 
-	
-	/**
-	* Initialize suite statistics file <p>
-	*/
-	public static void initializeSuiteStats()
-	{
 
+	/**
+	 * Initialize suite statistics file
+	 */
+	public static void initializeSuiteStats() {
 
 		//set boolean gbIsSuite to true. This means a suite is running (not a single script)
 		gbIsSuite = true;
@@ -978,12 +922,12 @@ public class Log
 		{
 			setScriptName(gsScriptName);
 		}
-		catch (Exception e) //in case the calling script doesn't have a matching script definition in the resources directory for some reason, just bail
+		catch (Exception e)
 		{
 			gsScriptName = "suite";
 			setScriptName(gsScriptName);
 		}
-		
+
 		//Store Suite Start time
 		DateFormat dtformat = DateFormat.getDateInstance();
 		DateFormat tmformat = DateFormat.getTimeInstance();
@@ -1025,37 +969,32 @@ public class Log
 		}
 		catch (IOException ioe)
 		{
-		errorHandler("Error saving suite statistic INI variables in file: " + gsSuiteStatFile, ioe);
+			errorHandler("Error saving suite statistic INI variables in file: " + gsSuiteStatFile, ioe);
 		}
-
-
-
 	}
 
 
 
 	/**
-	* Displays a banner in the result log output
-	* @param sBanner message to display in banner
-	*/
-	public static void logBanner(String sBanner)
-	{
-	//logs a banner like this in log output:
-	//==============================================================================
-	//My Test Info
-	//==============================================================================
-	String sLineSeparator = "==============================================================================";
-	logScriptInfo(sLineSeparator, 3);
-	logScriptInfo(sBanner,3);
-	logScriptInfo(sLineSeparator, 3);
+	 * Displays a banner in the result log output
+	 * @param sBanner message to display in banner
+	 */
+	public static void logBanner(String sBanner) {
+		//logs a banner like this in log output:
+		//==============================================================================
+		//My Test Info
+		//==============================================================================
+		String sLineSeparator = "==============================================================================";
+		logScriptInfo(sLineSeparator, 3);
+		logScriptInfo(sBanner,3);
+		logScriptInfo(sLineSeparator, 3);
 	}
 
 
 	/**
-	* Logs test suite statistics <p>
-	*/
-	public static void logSuiteStats()
-	{
+	 * Logs test suite statistics 
+	 */
+	public static void logSuiteStats() {
 
 		StringBuffer sSummary = new StringBuffer();
 
@@ -1101,7 +1040,7 @@ public class Log
 			sTmp = settings.getProperty("ScriptPrctFailed");
 			inScriptPrctFailed = Double.parseDouble(sTmp);
 
-
+			
 			sTmp = settings.getProperty("TestCaseCounter");
 			inTestCaseCounter = Integer.parseInt(sTmp);
 
@@ -1125,7 +1064,7 @@ public class Log
 
 			sTmp = settings.getProperty("ElapsedTime");
 			inElapsedTime = Long.parseLong(sTmp);
-			
+
 			DateFormat dtformat = DateFormat.getDateInstance();
 			DateFormat tmformat = DateFormat.getTimeInstance();
 
@@ -1150,7 +1089,7 @@ public class Log
 			sSummary.append("* Total Number of Errors found:          " + inErrorCounter + gsNewline);
 			sSummary.append("* End Date and Time:                     " + dtformat.format(new Date()).toString() + " " + tmformat.format(new Date()).toString());
 			sSummary.append("* Total Elapsed Time:                    " + DateTime.getFormattedDateTimeForElapsedTime(inElapsedTime) + gsNewline);		//getFormattedDateTime
-			//sSummary.append("* Total Elapsed Time:                  " + getElapsedTime(inElapsedTime) + gsNewline);
+		  //sSummary.append("* Total Elapsed Time:                  " + getElapsedTime(inElapsedTime) + gsNewline);
 			sSummary.append("******************************************************************************" + gsNewline);
 
 
@@ -1172,63 +1111,33 @@ public class Log
 			logScriptInfo("* Total Number of Errors found:          " + inErrorCounter, 3);
 			logScriptInfo("* End Date and Time:                     " + dtformat.format(new Date()) + " " + tmformat.format(new Date()),3);
 			logScriptInfo("* Total Elapsed Time:                    " + DateTime.getFormattedDateTimeForElapsedTime(inElapsedTime), 3);
-			//logScriptInfo("* Total Elapsed Time:                  " + getElapsedTime(inElapsedTime),3);
+		  //logScriptInfo("* Total Elapsed Time:                  " + getElapsedTime(inElapsedTime),3);
 			logScriptInfo("******************************************************************************", 3);
 
-		gsResultFile = gsSuiteResultFile;
+			gsResultFile = gsSuiteResultFile;
 
-		//write out HTML formatted suite results file
-		gsPassFailFile = gsAutomationAutoResultPath + gsHtmlResultFileName;
-		writePassFailResultsToHtmlFormat(gsResultFile, gsPassFailFile);
+			//write out HTML formatted suite results file
+			gsPassFailFile = gsAutomationAutoResultPath + gsHtmlResultFileName;
+			writePassFailResultsToHtmlFormat(gsResultFile, gsPassFailFile);
 
 		}
 		catch (Exception e)
 		{
-		errorHandler("Error loading suite statistic property variables in file: " + gsSuiteStatFile, e);
+			errorHandler("Error loading suite statistic property variables in file: " + gsSuiteStatFile, e);
 		}
 
-		//display log results in specified Viewer when test suite completes
-		if (gsSuiteResultFile != null)
-		{
-			if (gsAutomationResultViewerApp != null)
-			{	
-				try{
-					String[] lsViewer = new String[] {gsAutomationResultViewerApp,gsAutomationAutoResultPath+"auto_report_details.htm"};
-					//System.out.println(lsViewer[0]);
-					//System.out.println(lsViewer[1]);
-					Runtime.getRuntime().exec(lsViewer);
-					}
-					catch(Exception e){
-						System.err.println("Error loading alternative Result Viewer application");
-						e.printStackTrace();
-						
-					}
-			}
-		}
-		
-	}
-
-	/**
-	* Displays interactive dialog message <p>
-	 * @param sMsg
-	 * @param sTitle
-	*/
-	public static void displayMessageDlg(String sMsg, String sTitle)
-	{
-		JOptionPane.showMessageDialog(null, sMsg, sTitle, JOptionPane.INFORMATION_MESSAGE);
 	}
 
 
 	/**
-	* Compares 2 boolean values and logs result info <p>
-	* <p>
-	* @param bExpected		Expected Value
-	* @param bActual		Actual Value
-	* @param sDesc			Description of boolean comparison
-	* @return true if matched false if no-match
-	*/
-	public static boolean altVerify(boolean bExpected, boolean bActual, String sDesc)
-	{
+	 * Compares 2 boolean values and logs result info <p>
+	 * <p>
+	 * @param bExpected		Expected Value
+	 * @param bActual		Actual Value
+	 * @param sDesc			Description of boolean comparison
+	 * @return true if matched false if no-match
+	 */
+	public static boolean altVerify(boolean bExpected, boolean bActual, String sDesc) {
 		if (bActual == bExpected)
 		{
 			logScriptInfo("Verify " + sDesc + " Expected: " + bExpected + " Actual: " + bActual, giAutomationLogType);
@@ -1236,13 +1145,13 @@ public class Log
 		}
 		else
 		{
-		errorHandler("Verify " + sDesc + " Expected: " + bExpected + " Actual: " + bActual);
+			errorHandler("Verify " + sDesc + " Expected: " + bExpected + " Actual: " + bActual);
 			return false;
 		}
 
 	}
-	
-	
+
+
 	/**
 	 * Compares 2 boolean values and displays all result info, throws exception if no match <p>
 	 * @param bExpected		Expected Value
@@ -1254,8 +1163,7 @@ public class Log
 	 * the comparison fails, use altVerify instead of altVerifyFatal
 	 * @throws Exception
 	 */
-	public static boolean altVerifyFatal(boolean bExpected, boolean bActual, String sDesc) throws Exception
-	{
+	public static boolean altVerifyFatal(boolean bExpected, boolean bActual, String sDesc) throws Exception {
 		if (!altVerify(bExpected, bActual, sDesc)){
 			throw new Exception("Error performing: " + sDesc + " Expected: " + bExpected + " Actual: " + bActual);
 		} else {
@@ -1264,15 +1172,14 @@ public class Log
 	}
 
 	/**
-	* Compares 2 boolean values and displays result info - only log output of errors <p>
-	* <p>
-	* @param bExpected Expected Value
-	* @param bActual Actual Value
-	* @param sDesc Description of boolean comparison
-	* @return true if matched false if no-match
-	*/
-	public static boolean altConfirm(boolean bExpected, boolean bActual, String sDesc)
-	{
+	 * Compares 2 boolean values and displays result info - only log output of errors <p>
+	 * <p>
+	 * @param bExpected Expected Value
+	 * @param bActual Actual Value
+	 * @param sDesc Description of boolean comparison
+	 * @return true if matched false if no-match
+	 */
+	public static boolean altConfirm(boolean bExpected, boolean bActual, String sDesc) {
 		if (bActual == bExpected)
 		{
 			//logScriptInfo("Verify " + sDesc + " Expected: " + bExpected + " Actual: " + bActual, giAutomationLogType);
@@ -1280,7 +1187,7 @@ public class Log
 		}
 		else
 		{
-		errorHandler(sDesc + " Expected: " + bExpected + " Actual: " + bActual);
+			errorHandler(sDesc + " Expected: " + bExpected + " Actual: " + bActual);
 			return false;
 		}
 
@@ -1298,8 +1205,7 @@ public class Log
 	 * the comparison fails, use altVerify instead of altVerifyFatal
 	 * @throws Exception
 	 */
-	public static boolean altVerifyFatal(String sExpected, String sActual, boolean bExact, String sDesc) throws Exception
-	{
+	public static boolean altVerifyFatal(String sExpected, String sActual, boolean bExact, String sDesc) throws Exception {
 		if (!altVerify(sExpected, sActual, bExact, sDesc)){
 			throw new Exception("Error verifying: " + sDesc +  " Expected: \"" + sExpected + "\" Actual: \"" + sActual + "\"");
 		} else {
@@ -1309,14 +1215,13 @@ public class Log
 
 
 	/**
-	* Compares 2 string values and displays all result info <p>
-	* @param sExpected Expected Value
-	* @param sActual Actual Value
-	* @param bExactMatch true means actual and expected must be exact, false means Expected must be contained within Actual
-	* @return true if matched false if no-match
-	*/
-	public static boolean altVerify(String sExpected, String sActual, boolean bExactMatch)
-	{
+	 * Compares 2 string values and displays all result info <p>
+	 * @param sExpected Expected Value
+	 * @param sActual Actual Value
+	 * @param bExactMatch true means actual and expected must be exact, false means Expected must be contained within Actual
+	 * @return true if matched false if no-match
+	 */
+	public static boolean altVerify(String sExpected, String sActual, boolean bExactMatch) {
 		if (bExactMatch == true)
 		{
 			if (sActual.toUpperCase().equals(sExpected.toUpperCase()))
@@ -1326,7 +1231,7 @@ public class Log
 			}
 			else
 			{
-			errorHandler("Verify Expected: \"" + sExpected + "\" Actual: \"" + sActual + "\"");
+				errorHandler("Verify Expected: \"" + sExpected + "\" Actual: \"" + sActual + "\"");
 				return false;
 			}
 		}
@@ -1339,7 +1244,7 @@ public class Log
 			}
 			else
 			{
-			errorHandler("Verify Expected: \"" + sExpected + "\" Actual: \"" + sActual + "\"");
+				errorHandler("Verify Expected: \"" + sExpected + "\" Actual: \"" + sActual + "\"");
 				return false;
 			}
 		}
@@ -1348,14 +1253,13 @@ public class Log
 
 
 	/**
-	* Compares 2 string values and displays all result info. Can test for exact match<p>
-	* @param sExpected Expected Value
-	* @param sActual Actual Value
-	* @param sDescription Description of the test
-	* @return true if matched false if no-match
-	*/
-	public static boolean altVerify(String sExpected, String sActual, boolean bExactMatch, String sDescription)
-	{
+	 * Compares 2 string values and displays all result info. Can test for exact match<p>
+	 * @param sExpected Expected Value
+	 * @param sActual Actual Value
+	 * @param sDescription Description of the test
+	 * @return true if matched false if no-match
+	 */
+	public static boolean altVerify(String sExpected, String sActual, boolean bExactMatch, String sDescription) {
 		if (bExactMatch)
 		{
 
@@ -1366,7 +1270,7 @@ public class Log
 			}
 			else
 			{
-			errorHandler("Verify Expected: \"" + sExpected + "\" Actual: \"" + sActual + "\"" + " " + sDescription);
+				errorHandler("Verify Expected: \"" + sExpected + "\" Actual: \"" + sActual + "\"" + " " + sDescription);
 				return false;
 			}
 		}
@@ -1379,7 +1283,7 @@ public class Log
 			}
 			else
 			{
-			errorHandler("Verify Expected: \"" + sExpected + "\" Actual: \"" + sActual + "\"" + " " + sDescription);
+				errorHandler("Verify Expected: \"" + sExpected + "\" Actual: \"" + sActual + "\"" + " " + sDescription);
 				return false;
 			}
 		}
@@ -1388,14 +1292,13 @@ public class Log
 
 
 	/**
-	* Compares 2 integer values and displays all result info <p>
-	* @param iExpected		Expected Value
-	* @param iActual		Actual Value
-	* @param sDesc			Description of boolean comparison
-	* @return true if matched false if no-match
-	*/
-	public static boolean altVerify(int iExpected, int iActual, String sDesc)
-	{
+	 * Compares 2 integer values and displays all result info <p>
+	 * @param iExpected		Expected Value
+	 * @param iActual		Actual Value
+	 * @param sDesc			Description of boolean comparison
+	 * @return true if matched false if no-match
+	 */
+	public static boolean altVerify(int iExpected, int iActual, String sDesc) {
 		if (iActual == iExpected)
 		{
 			logScriptInfo("Verify " + sDesc + " Expected: " + iExpected + " Actual: " + iActual,giAutomationLogType);
@@ -1403,20 +1306,20 @@ public class Log
 		}
 		else
 		{
-		errorHandler("Verify " + sDesc + " Expected: " + iExpected + " Actual: " + iActual);
+			errorHandler("Verify " + sDesc + " Expected: " + iExpected + " Actual: " + iActual);
 			return false;
 		}
 
 	}
 
 	/**
-	* Compares 2 integer values and displays all result info. Throws Exception that will stop script upon failure <p>
-	* @param iExpected		Expected Value
-	* @param iActual		Actual Value
-	* @param sDesc			Description of boolean comparison
-	* @return true if matched false if no-match
-	* @throws Exception
-	*/
+	 * Compares 2 integer values and displays all result info. Throws Exception that will stop script upon failure <p>
+	 * @param iExpected		Expected Value
+	 * @param iActual		Actual Value
+	 * @param sDesc			Description of boolean comparison
+	 * @return true if matched false if no-match
+	 * @throws Exception
+	 */
 	public static boolean altVerifyFatal(int iExpected, int iActual, String sDesc) throws Exception{
 		if (!altVerify(iExpected, iActual, sDesc)){
 			throw new Exception("Error verifying: " + sDesc);
@@ -1425,35 +1328,35 @@ public class Log
 		}
 	}
 
-	//****************************Automation Properties methods
+	//**************************** Automation Properties methods ********************************************//
 
 	/**
-	* Loads system specific global automation variables <p>
-	* @param sFile		properties file to load
-	*/
+	 * Loads system specific global automation variables
+	 * @param sFile		properties file to load
+	 */
 	public static void loadAutoPropSettings(String sFile)
 	{
 		//System.out.println(sFile);
-		
+
 		String sTmp = "";
-		
+
 		//if automation.properties file does not exist, check in alternate folder 
 		if(!FileIO.fileExists(sFile))
 		{
-			
+
 			String sAltDir = getAlternateAutoPropDir(); 
-			
+
 			//check for alternate automation properties directory specified in the system environment variable ALT_AUTOMATION_PROPERTIES_DIR
 			if (sAltDir != "")
 			{
 				String sAltFile = getAlternateAutoPropDir() + FileIO.stripPath(sFile);
-				
+
 				if (!FileIO.fileExists(sAltFile)){
 					System.err.println("ERROR: The " + "\"" + "Automation.properties" + "\"" + " file does not exist in the user home folder: " + FileIO.getParentPath(sFile) + " or alternate folder: " + getAlternateAutoPropDir());
 					System.err.println("Either copy the automation.properties file to your home folder or create an alternate properties folder by creating a system environment variable called ALT_AUTOMATION_PROPERTIES_DIR and set the value to the desired alternate folder (i.e. c:\\temp\\)");
 					System.exit(-1);	//Stops all further execution
 				}
-				
+
 				//System.out.println(sAltFile);  //found automation.properties file in alternate folder 
 			}	
 			else{
@@ -1462,245 +1365,200 @@ public class Log
 				System.exit(-1);	//Stops all further execution
 			}
 		}
-		
+
 		//else
-			//System.out.println(sFile);	//found automation.properties file in the users home folder
-		
+		//System.out.println(sFile);	//found automation.properties file in the users home folder
+
 		//load Automation properties
 		try
-			{
-				//General Automation Properties
-				
-				//Parent Automation Directory
-				gsAutomationAutoPath = getPropertyFromFile("gsAutomationAutoPath",sFile);
-				if (gsAutomationAutoPath == null || gsAutomationAutoPath.isEmpty()){
-					gsAutomationAutoPath = Platform.getCurrentProjectPath(); //set to default if left blank in automation.propeties file
-					//System.out.println(gsAutomationAutoPath);
-				}
+		{
+			//General Automation Properties
 
-				//Test Data Directory
-				gsAutomationAutoSupportDocs = getPropertyFromFile("gsAutomationAutoSupportDocs",sFile);
-				if (gsAutomationAutoSupportDocs == null || gsAutomationAutoSupportDocs.isEmpty()){
-					sTmp = Platform.getCurrentProjectPath() + Log.gsScriptName.replace(".",Platform.getFileSeparator());
-					gsAutomationAutoSupportDocs = FileIO.getParentPath(sTmp)+"testdata" + Platform.getFileSeparator(); //set to default if left blank in automation.propeties file
-					//System.out.println(gsAutomationAutoSupportDocs);
-				} 
-
-
-				//Result Log Directory
-				gsAutomationAutoResultPath = getPropertyFromFile("gsAutomationAutoResultPath",sFile);
-				if (gsAutomationAutoResultPath == null || gsAutomationAutoResultPath.isEmpty()){
-					sTmp = Platform.getCurrentProjectPath() + Log.gsScriptName.replace(".",Platform.getFileSeparator());
-					gsAutomationAutoResultPath = FileIO.getParentPath(sTmp)+"results" + Platform.getFileSeparator(); //set to default if left blank in automation.propeties file
-					//System.out.println(gsAutomationAutoResultPath);
-				}
-					
-				//if result directory doesn't exist create it
-				File resultsDir = new File(gsAutomationAutoResultPath);
-				if (!resultsDir.exists())
-				{
-					resultsDir.mkdirs();
-				}
-
-				
-				
-				//Result file suffix
-				gsAutomationAutoResultFileSuffix = getPropertyFromFile("gsAutomationAutoResultFileSuffix",sFile);
-				if (gsAutomationAutoResultFileSuffix == null || gsAutomationAutoResultFileSuffix.isEmpty())
-					gsAutomationAutoResultFileSuffix = ".txt"; //set to default if left blank in automation.propeties file
-
-				//Image suffix
-				gsAutomationAutoResultErrorImageSuffix = getPropertyFromFile("gsAutomationAutoResultErrorImageSuffix",sFile);
-				if (gsAutomationAutoResultErrorImageSuffix == null || gsAutomationAutoResultErrorImageSuffix.isEmpty())
-					gsAutomationAutoResultErrorImageSuffix = ".jpg"; //set to default if left blank in automation.propeties file
-				
-				//Video suffix
-				gsAutomationAutoResultVideoSuffix = getPropertyFromFile("gsAutomationAutoResultVideoSuffix",sFile);
-				if (gsAutomationAutoResultVideoSuffix == null || gsAutomationAutoResultVideoSuffix.isEmpty())
-					gsAutomationAutoResultVideoSuffix = ".avi"; //set to default if left blank in automation.propeties file
-				
-				//Spreadsheet suffix
-				gsAutomationTestDataSpreadsheetSuffix = getPropertyFromFile("gsAutomationTestDataSpreadsheetSuffix",sFile);
-				if (gsAutomationTestDataSpreadsheetSuffix == null || gsAutomationTestDataSpreadsheetSuffix.isEmpty())
-					gsAutomationTestDataSpreadsheetSuffix = ".xls"; //set to default if left blank in automation.propeties file
-				
-				
-
-				
-				//Log type
-				sTmp = getPropertyFromFile("giAutomationLogType",sFile);
-				if (sTmp == null || sTmp.isEmpty())
-					giAutomationLogType = 1; //set to default if left blank in automation.propeties file
-				else	
-					giAutomationLogType = Integer.parseInt(getPropertyFromFile("giAutomationLogType",sFile));
-				
-				//Stack Trace
-				sTmp = getPropertyFromFile("gbAutomationStackTrace",sFile);
-				if (sTmp == null || sTmp.isEmpty())
-					gbAutomationStackTrace = true;  //set to default if left blank in automation.propeties file  
-				else
-					gbAutomationStackTrace = Boolean.valueOf(getPropertyFromFile("gbAutomationStackTrace",sFile)).booleanValue();
-
-				//Auto Image Capture on every testcase
-				sTmp = getPropertyFromFile("gbAutomationImageCapture",sFile);
-				if (sTmp == null || sTmp.isEmpty())
-					gbAutomationImageCapture = false; //set to default if left blank in automation.propeties file
-				else
-					gbAutomationImageCapture = Boolean.valueOf(getPropertyFromFile("gbAutomationImageCapture",sFile)).booleanValue();
-
-				//Auto Image capture on every error 
-				sTmp = getPropertyFromFile("gbAutomationErrorImageCapture",sFile);
-				if (sTmp == null || sTmp.isEmpty())
-					gbAutomationErrorImageCapture = true;  //set to default if left blank in automation.propeties file
-				else	
-					gbAutomationErrorImageCapture = Boolean.valueOf(getPropertyFromFile("gbAutomationErrorImageCapture",sFile)).booleanValue();
-				
-				
-				//Auto Video capture 
-				sTmp = getPropertyFromFile("gbAutomationVideoCapture",sFile);
-				if (sTmp == null || sTmp.isEmpty())
-					gbAutomationVideoCapture = false;  //set to default if left blank in automation.propeties file
-				else	
-					gbAutomationVideoCapture = Boolean.valueOf(getPropertyFromFile("gbAutomationVideoCapture",sFile)).booleanValue();
-				
-				//Close browser at script completion 
-				sTmp = getPropertyFromFile("gbAutomationCloseTestBrowserAtScriptCompletion",sFile);
-				if (sTmp == null || sTmp.isEmpty())
-					gbAutomationCloseTestBrowserAtScriptCompletion = true;  //set to default if left blank in automation.propeties file
-				else
-					gbAutomationCloseTestBrowserAtScriptCompletion = Boolean.valueOf(getPropertyFromFile("gbAutomationCloseTestBrowserAtScriptCompletion",sFile)).booleanValue();
-				
-								
-				//Global Automation Time out / Wait variables 
-				sTmp = getPropertyFromFile("giAutomationPause1TO",sFile);
-				if (sTmp == null || sTmp.isEmpty())
-					giAutomationPause1TO = 1; //set to default if left blank in automation.propeties file
-				else	
-					giAutomationPause1TO = Integer.parseInt(getPropertyFromFile("giAutomationPause1TO",sFile));
-				
-				
-				sTmp = getPropertyFromFile("giAutomationPause2TO",sFile);
-				if (sTmp == null || sTmp.isEmpty())
-					giAutomationPause2TO = 2; //set to default if left blank in automation.propeties file
-				else	
-					giAutomationPause2TO = Integer.parseInt(getPropertyFromFile("giAutomationPause2TO",sFile));
-				
-				
-				sTmp = getPropertyFromFile("giAutomationShortTO",sFile);
-				if (sTmp == null || sTmp.isEmpty())
-					giAutomationShortTO = 5; //set to default if left blank in automation.propeties file
-				else	
-					giAutomationShortTO = Integer.parseInt(getPropertyFromFile("giAutomationShortTO",sFile));
-				
-				
-				sTmp = getPropertyFromFile("giAutomationNormalTO",sFile);
-				if (sTmp == null || sTmp.isEmpty())
-					giAutomationNormalTO = 10; //set to default if left blank in automation.propeties file
-				else
-					giAutomationNormalTO = Integer.parseInt(getPropertyFromFile("giAutomationNormalTO",sFile));
-				
-				
-				sTmp = getPropertyFromFile("giAutomationWaitTO",sFile);
-				if (sTmp == null || sTmp.isEmpty())
-					giAutomationWaitTO = 15; //set to default if left blank in automation.propeties file
-				else
-					giAutomationWaitTO = Integer.parseInt(getPropertyFromFile("giAutomationWaitTO",sFile));
-				
-				sTmp = getPropertyFromFile("giAutomationMedTO",sFile);
-				if (sTmp == null || sTmp.isEmpty())
-					giAutomationMedTO = 30; //set to default if left blank in automation.propeties file
-				else	
-					giAutomationMedTO = Integer.parseInt(getPropertyFromFile("giAutomationMedTO",sFile));
-				
-				sTmp = getPropertyFromFile("giAutomationLongTO",sFile);
-				if (sTmp == null || sTmp.isEmpty())
-					giAutomationLongTO = 60; //set to default if left blank in automation.propeties file
-				else
-					giAutomationLongTO = Integer.parseInt(getPropertyFromFile("giAutomationLongTO",sFile));
-				
-
-
-				//Test Server/User Properties
-				
-				//Test URL
-				gsAutomationBaseURL = getPropertyFromFile("gsAutomationBaseURL",sFile);
-				if (gsAutomationBaseURL == null || gsAutomationBaseURL.isEmpty())
-					gsAutomationBaseURL = "about:blank";	//set to default if left blank in automation.propeties file
-				
-				
-				//Test browser
-				gsAutomationTestBrowser = getPropertyFromFile("gsAutomationTestBrowser",sFile);
-				if (gsAutomationTestBrowser == null || gsAutomationTestBrowser.isEmpty())
-					gsAutomationTestBrowser = "Firefox";	//set to default if left blank in automation.propeties file
-					
-				
-				//Determine if browser is Internet Explorer, and if so, what version to set a standard
-				// value for the browser based on the value in Automation.properties
-				//Default IE browser is IE6.  Look for most recent version of browser first
-				if (gsAutomationTestBrowser.indexOf("Internet Explorer")>0| gsAutomationTestBrowser.indexOf("IE")>0){
-					
-					if (gsAutomationTestBrowser.contains("11")){
-						gsAutomationTestBrowser = Platform.gsInternetExplorer11;
-					}
-					
-					else if (gsAutomationTestBrowser.contains("10")){
-						gsAutomationTestBrowser = Platform.gsInternetExplorer10;
-					}
-					
-					else if (gsAutomationTestBrowser.contains("9")){
-						gsAutomationTestBrowser = Platform.gsInternetExplorer9;
-					}
-					
-					else if (gsAutomationTestBrowser.contains("8")){
-						gsAutomationTestBrowser = Platform.gsInternetExplorer8;
-					}
-					
-					else if (gsAutomationTestBrowser.contains("7")){
-						gsAutomationTestBrowser = Platform.gsInternetExplorer7;
-
-					}
-				}
-
-				//Base State Properties
-				gsAutomationBrowserBaseStatePage = getPropertyFromFile("gsAutomationBrowserBaseStatePage",sFile);
-
-				//Test Result Viewer application/browser 
-				gsAutomationResultViewerApp = getPropertyFromFile("gsAutomationResultViewerApp",sFile);
-				if (gsAutomationResultViewerApp.equals(""))
-					gsAutomationResultViewerApp = null;
-				
-				
-				//Browser Profile Properties
-				gsAutomationBrowserProfile = getPropertyFromFile("gsAutomationBrowserProfile",sFile);
-				if (gsAutomationBrowserProfile.equals(""))
-					gsAutomationBrowserProfile = null;
-				
-				
-				//BrowserPath
-				gsAutomationBrowserPath = getPropertyFromFile("gsAutomationBrowserPath",sFile);
-				if (gsAutomationBrowserPath.equals(""))
-					gsAutomationBrowserPath = null;
-
-				
-				//Test level
-				sTmp = getPropertyFromFile("giAutomationTestLevel",sFile);
-				if (sTmp == null || sTmp.isEmpty())
-					giAutomationTestLevel = 2; //set to default if left blank in automation.propeties file
-				else	
-					giAutomationTestLevel = Integer.parseInt(getPropertyFromFile("giAutomationTestLevel",sFile));
-
+			//Parent Automation Directory
+			gsAutomationAutoPath = getPropertyFromFile("gsAutomationAutoPath",sFile);
+			if (gsAutomationAutoPath == null || gsAutomationAutoPath.isEmpty()){
+				gsAutomationAutoPath = Platform.getCurrentProjectPath(); //set to default if left blank in automation.propeties file
+				//System.out.println(gsAutomationAutoPath);
 			}
-			catch (Exception e)
-			{
-			errorHandler("Error loading automation Property settings in file: " + gsAutoPropFile, e);
+
+			//Test Data Directory
+			gsAutomationAutoSupportDocs = getPropertyFromFile("gsAutomationAutoSupportDocs",sFile);
+			if (gsAutomationAutoSupportDocs == null || gsAutomationAutoSupportDocs.isEmpty()){
+				sTmp = Platform.getCurrentProjectPath() + Log.gsScriptName.replace(".",Platform.getFileSeparator());
+				gsAutomationAutoSupportDocs = FileIO.getParentPath(sTmp)+"testdata" + Platform.getFileSeparator(); //set to default if left blank in automation.propeties file
+				//System.out.println(gsAutomationAutoSupportDocs);
+			} 
+
+			//Result Log Directory
+			gsAutomationAutoResultPath = getPropertyFromFile("gsAutomationAutoResultPath",sFile);
+			if (gsAutomationAutoResultPath == null || gsAutomationAutoResultPath.isEmpty()){
+				sTmp = Platform.getCurrentProjectPath() + Log.gsScriptName.replace(".",Platform.getFileSeparator());
+				gsAutomationAutoResultPath = FileIO.getParentPath(sTmp)+"results" + Platform.getFileSeparator(); //set to default if left blank in automation.propeties file
+				//System.out.println(gsAutomationAutoResultPath);
 			}
+
+			//if result directory doesn't exist create it
+			File resultsDir = new File(gsAutomationAutoResultPath);
+			if (!resultsDir.exists()) {
+				resultsDir.mkdirs();
+			}
+
+
+			//Result file suffix
+			gsAutomationAutoResultFileSuffix = getPropertyFromFile("gsAutomationAutoResultFileSuffix",sFile);
+			if (gsAutomationAutoResultFileSuffix == null || gsAutomationAutoResultFileSuffix.isEmpty())
+				gsAutomationAutoResultFileSuffix = ".txt"; //set to default if left blank in automation.propeties file
+
+			//Image suffix
+			gsAutomationAutoResultErrorImageSuffix = getPropertyFromFile("gsAutomationAutoResultErrorImageSuffix",sFile);
+			if (gsAutomationAutoResultErrorImageSuffix == null || gsAutomationAutoResultErrorImageSuffix.isEmpty())
+				gsAutomationAutoResultErrorImageSuffix = ".jpg"; //set to default if left blank in automation.propeties file
+
+			//Video suffix
+			gsAutomationAutoResultVideoSuffix = getPropertyFromFile("gsAutomationAutoResultVideoSuffix",sFile);
+			if (gsAutomationAutoResultVideoSuffix == null || gsAutomationAutoResultVideoSuffix.isEmpty())
+				gsAutomationAutoResultVideoSuffix = ".avi"; //set to default if left blank in automation.propeties file
+
+			//Spreadsheet suffix
+			gsAutomationTestDataSpreadsheetSuffix = getPropertyFromFile("gsAutomationTestDataSpreadsheetSuffix",sFile);
+			if (gsAutomationTestDataSpreadsheetSuffix == null || gsAutomationTestDataSpreadsheetSuffix.isEmpty())
+				gsAutomationTestDataSpreadsheetSuffix = ".xls"; //set to default if left blank in automation.propeties file
+
+
+			//Log type
+			sTmp = getPropertyFromFile("giAutomationLogType",sFile);
+			if (sTmp == null || sTmp.isEmpty())
+				giAutomationLogType = 1; //set to default if left blank in automation.propeties file
+			else	
+				giAutomationLogType = Integer.parseInt(getPropertyFromFile("giAutomationLogType",sFile));
+
+			//Stack Trace
+			sTmp = getPropertyFromFile("gbAutomationStackTrace",sFile);
+			if (sTmp == null || sTmp.isEmpty())
+				gbAutomationStackTrace = true;  //set to default if left blank in automation.propeties file  
+			else
+				gbAutomationStackTrace = Boolean.valueOf(getPropertyFromFile("gbAutomationStackTrace",sFile)).booleanValue();
+
+			//Auto Image Capture on every testcase
+			sTmp = getPropertyFromFile("gbAutomationImageCapture",sFile);
+			if (sTmp == null || sTmp.isEmpty())
+				gbAutomationImageCapture = false; //set to default if left blank in automation.propeties file
+			else
+				gbAutomationImageCapture = Boolean.valueOf(getPropertyFromFile("gbAutomationImageCapture",sFile)).booleanValue();
+
+			//Auto Image capture on every error 
+			sTmp = getPropertyFromFile("gbAutomationErrorImageCapture",sFile);
+			if (sTmp == null || sTmp.isEmpty())
+				gbAutomationErrorImageCapture = true;  //set to default if left blank in automation.propeties file
+			else	
+				gbAutomationErrorImageCapture = Boolean.valueOf(getPropertyFromFile("gbAutomationErrorImageCapture",sFile)).booleanValue();
+
+			//Auto Video capture 
+			sTmp = getPropertyFromFile("gbAutomationVideoCapture",sFile);
+			if (sTmp == null || sTmp.isEmpty())
+				gbAutomationVideoCapture = false;  //set to default if left blank in automation.propeties file
+			else	
+				gbAutomationVideoCapture = Boolean.valueOf(getPropertyFromFile("gbAutomationVideoCapture",sFile)).booleanValue();
+
+			//Close browser at script completion 
+			sTmp = getPropertyFromFile("gbAutomationCloseTestBrowserAtScriptCompletion",sFile);
+			if (sTmp == null || sTmp.isEmpty())
+				gbAutomationCloseTestBrowserAtScriptCompletion = true;  //set to default if left blank in automation.propeties file
+			else
+				gbAutomationCloseTestBrowserAtScriptCompletion = Boolean.valueOf(getPropertyFromFile("gbAutomationCloseTestBrowserAtScriptCompletion",sFile)).booleanValue();
+
+			//Global Automation Time out / Wait variables 
+			sTmp = getPropertyFromFile("giAutomationPause1TO",sFile);
+			if (sTmp == null || sTmp.isEmpty())
+				giAutomationPause1TO = 1; //set to default if left blank in automation.propeties file
+			else	
+				giAutomationPause1TO = Integer.parseInt(getPropertyFromFile("giAutomationPause1TO",sFile));
+
+			sTmp = getPropertyFromFile("giAutomationPause2TO",sFile);
+			if (sTmp == null || sTmp.isEmpty())
+				giAutomationPause2TO = 2; //set to default if left blank in automation.propeties file
+			else	
+				giAutomationPause2TO = Integer.parseInt(getPropertyFromFile("giAutomationPause2TO",sFile));
+
+			sTmp = getPropertyFromFile("giAutomationShortTO",sFile);
+			if (sTmp == null || sTmp.isEmpty())
+				giAutomationShortTO = 5; //set to default if left blank in automation.propeties file
+			else	
+				giAutomationShortTO = Integer.parseInt(getPropertyFromFile("giAutomationShortTO",sFile));
+
+			sTmp = getPropertyFromFile("giAutomationNormalTO",sFile);
+			if (sTmp == null || sTmp.isEmpty())
+				giAutomationNormalTO = 10; //set to default if left blank in automation.propeties file
+			else
+				giAutomationNormalTO = Integer.parseInt(getPropertyFromFile("giAutomationNormalTO",sFile));
+
+			sTmp = getPropertyFromFile("giAutomationWaitTO",sFile);
+			if (sTmp == null || sTmp.isEmpty())
+				giAutomationWaitTO = 15; //set to default if left blank in automation.propeties file
+			else
+				giAutomationWaitTO = Integer.parseInt(getPropertyFromFile("giAutomationWaitTO",sFile));
+
+			sTmp = getPropertyFromFile("giAutomationMedTO",sFile);
+			if (sTmp == null || sTmp.isEmpty())
+				giAutomationMedTO = 30; //set to default if left blank in automation.propeties file
+			else	
+				giAutomationMedTO = Integer.parseInt(getPropertyFromFile("giAutomationMedTO",sFile));
+
+			sTmp = getPropertyFromFile("giAutomationLongTO",sFile);
+			if (sTmp == null || sTmp.isEmpty())
+				giAutomationLongTO = 60; //set to default if left blank in automation.propeties file
+			else
+				giAutomationLongTO = Integer.parseInt(getPropertyFromFile("giAutomationLongTO",sFile));
+
+			//Test browser
+			gsAutomationTestBrowser = getPropertyFromFile("gsAutomationTestBrowser",sFile);
+			if (gsAutomationTestBrowser == null || gsAutomationTestBrowser.isEmpty())
+				gsAutomationTestBrowser = "Firefox";	//set to default if left blank in automation.propeties file
+
+
+			//Determine if browser is Internet Explorer, and if so, what version to set a standard
+			// value for the browser based on the value in Automation.properties
+			//Default IE browser is IE6.  Look for most recent version of browser first
+			if (gsAutomationTestBrowser.indexOf("Internet Explorer")>0| gsAutomationTestBrowser.indexOf("IE")>0) {
+
+				if (gsAutomationTestBrowser.contains("10")){
+					gsAutomationTestBrowser = Platform.gsInternetExplorer10;
+				}
+
+				else if (gsAutomationTestBrowser.contains("9")){
+					gsAutomationTestBrowser = Platform.gsInternetExplorer9;
+				}
+			}
+
+			//Browser Profile Properties
+			gsAutomationBrowserProfile = getPropertyFromFile("gsAutomationBrowserProfile",sFile);
+			if (gsAutomationBrowserProfile.equals(""))
+				gsAutomationBrowserProfile = null;
+
+			//BrowserPath
+			gsAutomationBrowserPath = getPropertyFromFile("gsAutomationBrowserPath",sFile);
+			if (gsAutomationBrowserPath.equals(""))
+				gsAutomationBrowserPath = null;
+
+			//Test level
+			sTmp = getPropertyFromFile("giAutomationTestLevel",sFile);
+			if (sTmp == null || sTmp.isEmpty())
+				giAutomationTestLevel = 2; //set to default if left blank in automation.propeties file
+			else	
+				giAutomationTestLevel = Integer.parseInt(getPropertyFromFile("giAutomationTestLevel",sFile));
+
+		}
+		catch (Exception e)
+		{
+			errorHandler("Error loading Automation Property settings in file: " + gsAutoPropFile, e);
+		}
 
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	/**
 	 * This method prints out the global variables in the automation.properties file after they have been initialized
 	 */
@@ -1723,20 +1581,14 @@ public class Log
 		logScriptInfo("giAutomationWaitTO=" + String.valueOf(giAutomationWaitTO));
 		logScriptInfo("giAutomationMedTO=" + String.valueOf(giAutomationMedTO));
 		logScriptInfo("giAutomationLongTO="+ String.valueOf(giAutomationLongTO));
-		logScriptInfo("gsAutomationBaseURL=" + gsAutomationBaseURL);
 		logScriptInfo("gsAutomationTestBrowser=" + gsAutomationTestBrowser);
-		logScriptInfo("gsAutomationBrowserBaseStatePage=" + gsAutomationBrowserBaseStatePage);
-		logScriptInfo("gsAutomationResultViewerApp=" + gsAutomationResultViewerApp);
 		logScriptInfo("gsAutomationBrowserProfile=" + gsAutomationBrowserProfile);
 		logScriptInfo("gsAutomationBrowserPath=" + gsAutomationBrowserPath);
 		logScriptInfo("giAutomationTestLevel=" + String.valueOf(giAutomationTestLevel));
-		
-		}
-	
-	
-	
-	
-	
+
+	}
+
+
 	/**
 	 * Returns an alternate file directory, for the automation.properties file, specified in the System environment variable ALT_AUTOMATION_PROPERTIES_DIR
 	 * @return Sting containing alternate location for Automation properties files
@@ -1752,27 +1604,24 @@ public class Log
 		return sDirName;
 	}
 
-	
-	
+
 	/**
-	* Prints automation.properties file properties and values to the console
-	*/
-	public static void printAutomationProperties()
-	{
+	 * Prints automation.properties file properties and values to the console
+	 */
+	public static void printAutomationProperties() {
 		//Get machine specific global automation variables
 		File propFile = new File(gsAutoPropFile);
 		if (propFile.exists())
 		{
-
 			try
 			{
 				//load automation properties from properties file
 				FileInputStream in = new FileInputStream(gsAutoPropFile);
 				Properties autoSettings = new Properties();
 				autoSettings.load(in);
-				
+
 				logBanner("Displaying the properties and values from the active automation.properties file");
-				
+
 				//print settings from auto properties file
 				String[] ls = Strings.stringToStringArray(autoSettings.entrySet().toString(),",");
 				for (int x=0; x< ls.length;x++)
@@ -1783,20 +1632,17 @@ public class Log
 			}
 			catch (Exception e)
 			{
-			errorHandler("Error loading automation Property settings");
+				errorHandler("Error loading automation Property settings");
 			}
 
 		}
 
 	}
 
-
-
 	/**
 	 * Prints out the directory into which you should put the properties file
 	 */
-	public static void printDirForPropertiesFile()
-	{
+	public static void printDirForPropertiesFile() {
 		System.out.println(Platform.getUserHome());
 	}
 
@@ -1805,8 +1651,7 @@ public class Log
 	 * Gets the directory into which you should put properties files
 	 * @return String with properties directory path
 	 */
-	public static String getPropertiesDir()
-	{
+	public static String getPropertiesDir() {
 		return Platform.getUserHome();
 	}
 
@@ -1814,7 +1659,6 @@ public class Log
 	/**
 	 * Loads properties from a file. Properties are appended to the existing
 	 * properties object.
-	 * <p>
 	 * @param p      properties to fill in
 	 * @param file   file to read properties from
 	 *
@@ -1838,11 +1682,10 @@ public class Log
 
 	/**
 	 * Returns the specified property from the given properties file
-	 * <p>
 	 * @param String sKey - Property Key for value to return
 	 * @param fileName properties file name to load
 	 * @return String containing value of the specified key variable from the specified properties file 
-	*/
+	 */
 	public static String getPropertyFromFile(String sKey, String fileName) {
 		Properties prop = new Properties();
 		File file = new File(fileName);
@@ -1851,103 +1694,97 @@ public class Log
 
 		try{
 
-		//if properties file does not exist
-		if (!file.exists())
-		{
-
-			//System.out.println("WARNING: properties file: " + fileName + " does not exist. ");
-			//check in alternate location
-			String sAltPropFile = getPropertiesDir() + Platform.getFileSeparator() + FileIO.stripPath(fileName);
-			//System.out.println("switching to alternate property file: " + sAltPropFile);
-
-			//force to look for properties file in user's home folder
-			file = new File(sAltPropFile);
+			//if properties file does not exist
 			if (!file.exists())
 			{
-				//Try looking for properties file in automation project parent folder
-				String sAltPropFile2 = getDatastoreDir() + FileIO.stripPath(fileName);	
-				
-				file = new File(sAltPropFile2);
-				
-				// if properties file still can't be found give up 
-				if (!file.exists()){
-					System.err.println("FATAL ERROR - property file does NOT exist. Tried to find the following files: " + fileName + " , " + sAltPropFile + " , " + sAltPropFile2);
-					System.exit(-1);	//Stops all further execution
+
+				//System.out.println("WARNING: properties file: " + fileName + " does not exist. ");
+				//check in alternate location
+				String sAltPropFile = getPropertiesDir() + Platform.getFileSeparator() + FileIO.stripPath(fileName);
+				//System.out.println("switching to alternate property file: " + sAltPropFile);
+
+				//force to look for properties file in user's home folder
+				file = new File(sAltPropFile);
+				if (!file.exists())
+				{
+					//Try looking for properties file in automation project parent folder
+					String sAltPropFile2 = getDatastoreDir() + FileIO.stripPath(fileName);	
+
+					file = new File(sAltPropFile2);
+
+					// if properties file still can't be found give up 
+					if (!file.exists()){
+						System.err.println("FATAL ERROR - property file does NOT exist. Tried to find the following files: " + fileName + " , " + sAltPropFile + " , " + sAltPropFile2);
+						System.exit(-1);	//Stops all further execution
+					}
+
 				}
-
 			}
-		}
-		
-		
-		//assign property value
-		try{
-			loadFromFile(prop, file);
-			sPropVal = prop.getProperty(sKey);
-			}
-		catch(Exception e)
-		{
-			e.printStackTrace();sPropVal = "";
-		}
 
-		return sPropVal;
+
+			//assign property value
+			try{
+				loadFromFile(prop, file);
+				sPropVal = prop.getProperty(sKey);
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();sPropVal = "";
+			}
+
+			return sPropVal;
 
 		}
 		//catch any other errors
 		catch(Exception e){
-      e.printStackTrace();
+			e.printStackTrace();
 			//System.err.println(getStackTrace(e));
 			//System.out.println("error - returned Property value = " + sPropVal);
 			return sPropVal;
 		}
-		
+
 	}
-	
-	
-	
+
+
 	/**
-	* Sets/writes/changes the specified automation property (sKey) value (sVal) in the specified automation 
-    * properties file at runtime - example usage: setAutomationProperty ("automation.properties", "gsAutomationResultPath", "c:\\myautodir\\");
-	* <p>
-	* @param String sPropFileName filename (name only - no path info) of the automation property file you                    
-      want to update
-	* @param String sKey the property to modify
-	* @param String sVal the new value to set for the above sKey property
-	* @return new value for specified property
-	*/
-	public static String setAutomationProperty (String sPropFileName, String sKey, String sVal)
-	{
+	 * Sets/writes/changes the specified automation property (sKey) value (sVal) in the specified automation 
+	 * properties file at runtime - example usage: setAutomationProperty ("automation.properties", "gsAutomationResultPath", "c:\\myautodir\\");
+	 * @param String sPropFileName filename (name only - no path info) of the automation property file you want to update
+	 * @param String sKey the property to modify
+	 * @param String sVal the new value to set for the above sKey property
+	 * @return new value for specified property
+	 */
+	public static String setAutomationProperty (String sPropFileName, String sKey, String sVal) {
 		try{
 			// Append the path to the file name
 			String sPropFile = getPropertiesDir() + Platform.getFileSeparator()+ sPropFileName;
-		     
+
 			// Write new property in specified file
 			File f1 = new File(sPropFile);
 			if (f1.exists()) {
-			   FileIO.updatePropertyFile(sPropFile, sKey, sVal);
-			   getPropertyFromFile(sKey, sPropFile);
-			   return getPropertyFromFile(sKey, sPropFile);
+				FileIO.updatePropertyFile(sPropFile, sKey, sVal);
+				getPropertyFromFile(sKey, sPropFile);
+				return getPropertyFromFile(sKey, sPropFile);
 			}
-			
+
 		}catch(Exception e){
-			
-		   Log.errorHandler("Error setting " + "\"" + sKey + "\"" + " property in " + sPropFileName + " property file",e);
-		   return "Property Not Found";
+
+			Log.errorHandler("Error setting " + "\"" + sKey + "\"" + " property in " + sPropFileName + " property file",e);
+			return "Property Not Found";
 		}
 
 		return "Property Not Found";
-	 }
+	}
 
-
+	//****************************************  ** ** ** ***************************************************//
 	//The following methods are used to produce HTML formatted result file
-
 
 	/**
 	 * Loads a result file and extracts script names to a string array
 	 * @param sFile the result file to extract script names from 
 	 * @return String array containing all of the script names in the given result file
-	*/
-	public static String[] getScripts(String sFile)
-	{
+	 */
+	public static String[] getScripts(String sFile) {
 
 		String[] lsResFile = FileIO.getFileContentsAsListByUTF8(sFile);
 		String sScriptHeader = gsScriptHeader;
@@ -1980,9 +1817,8 @@ public class Log
 	 * @param sScriptBegin the text in the script to begin the extract
 	 * @param sScriptEnd the text in the script to end the extract
 	 * @return String containing all specified script information i.e. test cases
-	*/
-	public static String getScriptContent(String sFile, String sScriptBegin, String sScriptEnd)
-	{
+	 */
+	public static String getScriptContent(String sFile, String sScriptBegin, String sScriptEnd) {
 		String sScript = "";
 
 		//get testcases for selected script
@@ -1997,9 +1833,8 @@ public class Log
 	 * @param sBegin the text in the file to begin the extract
 	 * @param sEnd the text in the file to end the extract
 	 * @return String containing all specified text
-	*/
-	public static String extractBlock(String sFile, String sBegin, String sEnd)
-	{
+	 */
+	public static String extractBlock(String sFile, String sBegin, String sEnd) {
 		//find extraction blocks
 		int a = 1;
 		//int iBeginLine = 0;
@@ -2056,8 +1891,7 @@ public class Log
 	 * @param sEnd the text in the content to end the extract
 	 * @return String containing all specified text 
 	 */
-	public static String extractBlockFromString(String sContent, String sBegin, String sEnd)
-	{
+	public static String extractBlockFromString(String sContent, String sBegin, String sEnd) {
 		//find extraction blocks
 		int a = 1;
 		//int iBeginLine = 0;
@@ -2106,8 +1940,7 @@ public class Log
 	 * @param sBegin the text in the content to begin the extract
 	 * @return String containing test case information
 	 */
-	public static String getTestcaseBlockFromString(String sContent, String sBegin)
-	{
+	public static String getTestcaseBlockFromString(String sContent, String sBegin) {
 		//find extraction blocks
 		int a = 1;
 		//int iBeginLine = 0;
@@ -2131,9 +1964,9 @@ public class Log
 					{
 
 						while ((lsExtractionBlocks[x + a].indexOf(gsTestcaseHeader) == -1)
-							&& (lsExtractionBlocks[x + a].indexOf(gsScriptHeader) == -1)
-							&& (lsExtractionBlocks[x + a].indexOf(gsTestcaseFooter) == -1)
-							&& (lsExtractionBlocks.length >= (x + a)))
+								&& (lsExtractionBlocks[x + a].indexOf(gsScriptHeader) == -1)
+								&& (lsExtractionBlocks[x + a].indexOf(gsTestcaseFooter) == -1)
+								&& (lsExtractionBlocks.length >= (x + a)))
 						{
 
 							sBlock = sBlock + lsExtractionBlocks[x + a].trim() + gsNewline;
@@ -2159,9 +1992,8 @@ public class Log
 	 * Extracts names of all scripts that failed from text string of a given result file
 	 * @param sScriptContent the result log output
 	 * @return String containing the names of all of the scripts that failed
-	*/
-	public static String getFailedScripts(String sScriptContent)
-	{
+	 */
+	public static String getFailedScripts(String sScriptContent) {
 
 		if (sScriptContent.indexOf(gsFail) != -1)
 		{
@@ -2177,9 +2009,8 @@ public class Log
 	 * Extracts script name from block of text from given script result log
 	 * @param sScript the result output content 
 	 * @return the name of the script that was executed in the result log
-	*/
-	public static String getScriptNameFromBlock(String sScript)
-	{
+	 */
+	public static String getScriptNameFromBlock(String sScript) {
 
 		String[] lsResFile = Strings.stringToStringArray(sScript, gsNewline);
 		String sScriptHeader = gsScriptHeader;
@@ -2206,9 +2037,8 @@ public class Log
 	 * Extracts test case names from block of text from given script result
 	 * @param sBlock block of text from a result log
 	 * @return a list of names of test cases in a given block of result log content 
-	*/
-	public static String[] getTestcasesFromBlock(String sBlock)
-	{
+	 */
+	public static String[] getTestcasesFromBlock(String sBlock) {
 		String[] lsResFile = Strings.stringToStringArray(sBlock, gsNewline);
 		String sTestcaseHeader = gsTestcaseHeader;
 		String sTestcases = "";
@@ -2232,16 +2062,12 @@ public class Log
 		return lsTestcases;
 	}
 
-
-
-
 	/**
 	 * Extracts failed test case names from block of text from given script result file
 	 * @param sResFile the result file to get test case names from
 	 * @return names of test cases that failed
-	*/
-	public static String getFailedTestcases(String sResFile)
-	{
+	 */
+	public static String getFailedTestcases(String sResFile) {
 		//String[] lsFailedTestcases;
 		String sFailedTestcases = "";
 		//read in selected result file
@@ -2272,11 +2098,11 @@ public class Log
 			}
 		}
 
-	return sFailedTestcases;
+		return sFailedTestcases;
 	}
 
-	
-	
+
+
 	/**
 	 * Extracts a block of text from a given String in HTML format
 	 * @param sScriptContent string to extract text from
@@ -2284,8 +2110,7 @@ public class Log
 	 * @param sEnd partial text from end of text block
 	 * @return block of text from a given String in HTML format
 	 */
-	public static String extractBlockFromStringHtml(String sScriptContent, String sBegin, String sEnd)
-	{
+	public static String extractBlockFromStringHtml(String sScriptContent, String sBegin, String sEnd) {
 		//find extraction blocks
 		int a = 1;
 		//int iBeginLine = 0;
@@ -2327,9 +2152,7 @@ public class Log
 		return sBlock;
 	}
 
-	
-	
-	
+
 	/**
 	 * Extracts a block of text from a given String starting from the end of the string
 	 * @param sScriptContent string to extract text from
@@ -2387,7 +2210,6 @@ public class Log
 	}
 
 
-
 	/**
 	 * Gets script result info in HTML format
 	 * @param sScript - script to get result info from
@@ -2409,7 +2231,7 @@ public class Log
 		return sb.toString();
 	}
 
-	
+
 	/**
 	 * Gets suite result information in HTML format
 	 * @param sScript - suite to get suite results from
@@ -2429,10 +2251,6 @@ public class Log
 
 		return sb.toString();
 	}
-
-
-
-
 
 	/**
 	 * Writes out HTMl formatted result log file
@@ -2476,11 +2294,11 @@ public class Log
 		{
 			//get all scripts
 			lsScripts = getScripts(sResultFileIn);
-			
+
 			String sStartTime;
-			
+
 			int i = lsScripts.length;
-			
+
 			if (i == 1){
 				sStartTime = gsCurrentDateAndTime;
 			}
@@ -2490,20 +2308,20 @@ public class Log
 
 			//Write out HTML header info
 			FileIO.appendStringToFile(sTempScriptListFile,"<HTML><HEAD><TITLE>Automation Report for " + sStartTime + "</TITLE></HEAD>");
-			
-		//  FileIO.appendStringToFile(sTempScriptListFile,"<BODY STYLE="+"background-color:white"+">");
-						
+
+			//  FileIO.appendStringToFile(sTempScriptListFile,"<BODY STYLE="+"background-color:white"+">");
+
 			//Write header info at top of result table
 			FileIO.appendStringToFile(sTempScriptListFile,"<ALIGN=left>");
 			FileIO.appendStringToFile(sTempScriptListFile,"<FONT FACE=" + sDQ + "arial" + sDQ +">");
 			FileIO.appendStringToFile(sTempScriptListFile,"<B>Automation Report</B>" + "<BR>");
-		//	FileIO.appendStringToFile(sTempScriptListFile,"<H1>Automation Report</H1>" + "<BR>");
-		//	FileIO.appendStringToFile(sTempScriptListFile,"<IMG SRC="+"logo.jpg"+" + ALIGN="+"right"+"><BR>");
+			//	FileIO.appendStringToFile(sTempScriptListFile,"<H1>Automation Report</H1>" + "<BR>");
+			//	FileIO.appendStringToFile(sTempScriptListFile,"<IMG SRC="+"logo.jpg"+" + ALIGN="+"right"+"><BR>");
 			FileIO.appendStringToFile(sTempScriptListFile,"<B>Project Demo</B>" + "<BR>");
-		//	FileIO.appendStringToFile(sTempScriptListFile,"<H2>Project Demo</H2>" + "<BR>");
+			//	FileIO.appendStringToFile(sTempScriptListFile,"<H2>Project Demo</H2>" + "<BR>");
 			FileIO.appendStringToFile(sTempScriptListFile,"<B>Start Date and Time:</B>     " + sStartTime + "<BR><P>");
 			FileIO.appendStringToFile(sTempScriptListFile,"</FONT></ALIGN>");
-			
+
 			//Test result summary
 			//check if result is a suite or single script
 			if (i == 1)
@@ -2516,7 +2334,7 @@ public class Log
 			}
 			else
 			{
-//				Write out HTML footer info
+				//	Write out HTML footer info
 				FileIO.appendStringToFile(sTempScriptListFile,"<SMALL>");
 				FileIO.appendStringToFile(sTempScriptListFile,"<FONT FACE=" + sDQ + "arial" + sDQ +">");
 				FileIO.appendStringToFile(sTempScriptListFile,getSuiteResultInfoEnd(sResultFileIn));
@@ -2594,7 +2412,7 @@ public class Log
 					String sTestCase = lsTestcases[z].trim();
 
 					if ((!sFailedCase.isEmpty()) && (sFailedCase.indexOf(sTestCase) != -1)) {
-					
+
 						//display failed TESTCASES in red
 						FileIO.appendStringToFile(sTempTestcaseListFile,"<TR ALIGN=left><TD WIDTH=85%><SMALL>");
 
@@ -2627,30 +2445,25 @@ public class Log
 
 						FileIO.appendStringToFile(sTempTestcaseListFile,"</TR>");
 					}
+				}
 
+				//end table for tescases
+				FileIO.appendStringToFile(sTempTestcaseListFile,"</TABLE BORDER>");
 
 			}
+			
+			
+			
+			//spacer for complete script contents portion of result
+			FileIO.appendStringToFile(sTempTestcaseActionsFile,"<BR><BR>");
 
-			//end table for tescases
-			FileIO.appendStringToFile(sTempTestcaseListFile,"</TABLE BORDER>");
-
+			//write out complete script content - marking each testcase with an anchor tag
+			writeTestcaseContent(sResultFileIn, sTempTestcaseActionsFile);
 		}
-
-
-
-
-
-		//spacer for complete script contents portion of result
-		FileIO.appendStringToFile(sTempTestcaseActionsFile,"<BR><BR>");
-
-		//write out complete script content - marking each testcase with an anchor tag
-		writeTestcaseContent(sResultFileIn, sTempTestcaseActionsFile);
-		}
-		catch (Exception err)
+		catch (Exception e)
 		{
-		//do nothing here
+			//do nothing here
 		}
-
 
 		//create Detailed auto results - HTML result file
 		//write Script link list result portion - Section #1
@@ -2702,7 +2515,7 @@ public class Log
 		return sLog;
 	}
 
-	
+
 	/**
 	 * Update test case result anchor and description with html tag to display them
 	 * with different color according result type. If result is pass, then
@@ -2728,30 +2541,25 @@ public class Log
 		return sLogLine;
 	}
 
-
-
-
 	/**
 	 * Writes out entire script contents marking each testcase with an html anchor tag
 	 * for HTML result file output. Only to be used within writePassFailResultsToHtmlFormat() method
 	 * @param sResFileNameIn - Result file
 	 * @param sResFileNameOut - temporary Html formatted result file
 	 */
-	private static void writeTestcaseContent(String sResFileNameIn, String sResFileNameOut)
-	{
-
+	private static void writeTestcaseContent(String sResFileNameIn, String sResFileNameOut) {
 		try
 		{
-		String sDQ = "\"";
-		//get result file
-		File resfile = new File(sResFileNameIn);
+			String sDQ = "\"";
+			//get result file
+			File resfile = new File(sResFileNameIn);
 
-		//read selected result file into string array
-		//System.out.println(resfile.getPath());
-		String[] lsContents = FileIO.getFileContentsAsListByUTF8(resfile.getPath());
+			//read selected result file into string array
+			//System.out.println(resfile.getPath());
+			String[] lsContents = FileIO.getFileContentsAsListByUTF8(resfile.getPath());
 
-		//write out line of script marking testcases with an html anchor tag
-		for (int x = 0; x < lsContents.length; x++)
+			//write out line of script marking testcases with an html anchor tag
+			for (int x = 0; x < lsContents.length; x++)
 			{
 				//if line item is not null write it out
 				if (lsContents[x] != null)
@@ -2774,7 +2582,7 @@ public class Log
 						FileIO.appendStringToFile(sResFileNameOut,"</FONT><FONT COLOR=" +sDQ + "red" + sDQ + "><B>");
 					}
 
-//					write script contents - line item at a time
+					//					write script contents - line item at a time
 					FileIO.appendStringToFile(sResFileNameOut,lsContents[x]  + "<BR>");
 
 					//stop printing in red if error info has already been captured
@@ -2797,12 +2605,10 @@ public class Log
 					}
 				}
 			}
-
-
 		}
 		catch (Exception e)
 		{
-		//do nothing here
+			//do nothing here
 		}
 
 	}
@@ -2821,25 +2627,22 @@ public class Log
 		String str = "<span style='color:#888;font-size:12px;'>"+string.substring(index)+"</span>";
 		return log+str;
 	}
-	
-	
+
+
 	/**
 	 * Returns String containing the current scripts path information
 	 * @return String containing the current scripts path information
 	 */
-	public static String getTopScriptDir()
-	{
-	    String dsLoc = Platform.getCurrentProjectPath();
-	    return dsLoc + File.separator ;
-
+	public static String getTopScriptDir() {
+		String dsLoc = Platform.getCurrentProjectPath();
+		return dsLoc + File.separator ;
 	}
 
 	/**
 	 * Returns a string containing the automation datastore directory
 	 * @return string containing the automation datastore directory
 	 */
-	public static String getDatastoreDir()
-	{
+	public static String getDatastoreDir() {
 		return Platform.getCurrentProjectPath() + Platform.getFileSeparator();
 	}
 
@@ -2848,10 +2651,8 @@ public class Log
 	 * Returns a string containing the automation datastore parent directory
 	 * @return string containing the automation datastore parent directory
 	 */
-	public static String getDatastoreParentDir()
-	{
+	public static String getDatastoreParentDir() {
 		return getDatastoreDir();
-
 	}
 
 
@@ -2859,14 +2660,13 @@ public class Log
 	 * Returns a string containing the local host name of the test client system
 	 * @return string containing the local host name of the test client system
 	 */
-	public static String getLocalClientName()
-	{
+	public static String getLocalClientName() {
 		try{
-		return java.net.InetAddress.getLocalHost().toString();}
+			return java.net.InetAddress.getLocalHost().toString();}
 		catch(Exception e){return "Could not get local host client name";}
 
 	}
-	
+
 	/**
 	 * Append stack trace after log content. This will be very helpful to locate hidden performance issue.
 	 */
@@ -2904,9 +2704,6 @@ public class Log
 		return ivkInfo;
 	}
 
-	
-	
-	
 	/**
 	 * Append new content into result file.
 	 * result file will not be copied to suite file during autoCleanup().
@@ -2917,16 +2714,14 @@ public class Log
 	 */
 	public static void appendContentToResultFile(String content) {
 
-			if (gsResultFile != null){
-				FileIO.appendStringToFile(gsResultFile, content);
-			}
+		if (gsResultFile != null){
+			FileIO.appendStringToFile(gsResultFile, content);
+		}
 
-			if (gbIsSuite == true && gsSuiteResultFile != null) {
-				FileIO.appendStringToFile(gsSuiteResultFile, content);
-			}
+		if (gbIsSuite == true && gsSuiteResultFile != null) {
+			FileIO.appendStringToFile(gsSuiteResultFile, content);
+		}
 
 	}
 
-
-	
 }

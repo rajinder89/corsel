@@ -15,12 +15,11 @@ public class Randomize
 /** 
 * Generates String containing unique random date and time-based value.
 * For example, if the current date and time is 10/06/2006 11:06:52am
-* This mothod will return a string equal to "1006110652". <p>
+* This method will return a string equal to "1006110652". <p>
 * @return a String containing a date-based unique value
 */
 
-public static String genDateBasedRandVal()
-{
+public static String genDateBasedRandVal() {
 	//generates String containing unique random date-based value	
 	String s;
 	Date d = new Date();
@@ -44,8 +43,7 @@ public static String genDateBasedRandVal()
 * @return a String containing a date-based unique value
 */
 
-public static String genDateBasedRandVal(int i)
-{
+public static String genDateBasedRandVal(int i) {
 	//generates String containing unique random date-based value	
 	String s;
 	Date d = new Date();
@@ -63,6 +61,7 @@ public static String genDateBasedRandVal(int i)
 	return s.substring(ilen-i);
 	
 }
+
 /** 
 * Generates String containing unique  date-based on specified format <p>
  * @param Format 
@@ -70,8 +69,7 @@ public static String genDateBasedRandVal(int i)
 * @return a String containing a date-based on specified format
 */
 
-public static String genDateBasedonFormat(String Format)
-{
+public static String genDateBasedonFormat(String Format) {
 	//generates String containing unique random date-based value	
 	String s;
 	Date d = new Date();

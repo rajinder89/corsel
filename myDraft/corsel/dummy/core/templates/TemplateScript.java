@@ -10,62 +10,48 @@ import dummy.core.libs.Log;
 import dummy.core.libs.Platform;
 
 /**
- * Standard ACI Selenium Test Script Template file.
- * <p>
+ * Standard Selenium Test Script Template file.
  * Place your description of what the test script tests here. 
- * 
  */
+
 public class TemplateScript {
-	
-	
 	
 	/**
 	 * Initializes the automation for testing.
 	 * 
-	 * @throws Exception if an error occurs during the setup portion of the script
-	 * 
 	 */
 	@BeforeClass
-	public static void setUp() throws Exception {
+	public static void setUp() {
 	
-		Log.gsScriptName = Thread.currentThread().getStackTrace()[1].getClassName();	//script name is auto-generated via this code so DO NOT modify this item
+		//Script name is auto-generated via this code so DO NOT modify this item
+		Log.gsScriptName = Thread.currentThread().getStackTrace()[1].getClassName();	
 		
-		// TODO: change script descrition
+		// Change script description
 		Log.gsScriptDescription = "Add test description here";		//update test description
-		// TODO: change script author
-		Log.gsScriptAuthor = "Tony Venditti";						//update script author
 		
-		Log.gsScriptTestArea = FileIO.getParentPath(Platform.getCurrentProjectPath() + Log.gsScriptName.replace(".",Platform.getFileSeparator())); 	//script test area uses the project path info and is auto-generated via this code so DO NOT modify this item
+		// Change script author
+		Log.gsScriptAuthor = "Automation Tester";					//update script author
 		
-		Log.initialize();		//Reads in Automation.properties values, Logs script header information, initializes script metrics and starts Selenium server 
+		//Script test area uses the project path info and is auto-generated via this code so DO NOT modify this item
+		Log.gsScriptTestArea = FileIO.getParentPath(Platform.getCurrentProjectPath() + Log.gsScriptName.replace(".",Platform.getFileSeparator())); 	
 		
+		Log.initialize();		//Reads in Automation.properties values, Logs script header information, initializes script metrics 
 		
-		// TODO: change setup description
+		//  Change setup description
 		Log.logBanner("Setup Description goes here");
 
-		// TODO: replace if needed with your setup actions
-		Browser.start(); // start browser
-		Browser.loadURL("about:blank", Log.giAutomationShortTO);
+		// Replace if needed with your setup actions
+		Browser.start(); // Start browser
+		Browser.loadURL("about:blank", Log.giAutomationShortTO); // Load the application URL
 		
 	}
 	
 	
-
-	
-	
-
-	
 	/**
 	 * Short test description goes here.
-	 * <p>
-	 * A Test case description goes here. A test case in this Java-based
-	 * Selenium framework is denoted by the use of the
-	 * Log.startTestCase("Test case description") method. This script template
-	 * contains a sample Test section for ACI Selenium scripts. In order to work
-	 * in the JUnit-Eclipse IDE the test method below must contain the word
-	 * "test" at the beginning of the method name: for example,
-	 * "testMyFirstScript()"
-	 * 
+	 * A Test case description goes here. A test case in this Java-based Selenium framework is denoted by the use of the
+	 * Log.startTestCase("Test case description") method. 
+	 * This script template contains a sample Test section for Selenium scripts. 
 	 */
 	@Test
 	public void testTemplateScriptExample(){
@@ -84,10 +70,9 @@ public class TemplateScript {
 
 			// TODO: verify test results here. Example verification code below.
 			if (Browser.linkExists(sLink)) {
-				Log.logScriptInfo("Verified Link: " + "\"" + sLink + "\""
-						+ " is present");
+				Log.logScriptInfo("Verified Link: " + Log.sDQ + sLink + Log.sDQ + " is present");
 			} else {
-				Log.errorHandler("Link: " + "\"" + sLink + "\"" + " does NOT exist");
+				Log.errorHandler("Link: " + Log.sDQ + sLink + Log.sDQ + " does NOT exist");
 			}
 		}
 		
@@ -97,28 +82,14 @@ public class TemplateScript {
 	}
 	
 	
-	
-	
-	
-	
-	
 	/**
-	 * This function ends the test, calculates and logs the test results and terminates the automation
-	 * <p>
-	 * 
+	 * This function ends the test, calculates and logs the test results 
+	 * and terminates the automation
 	 */
 	@AfterClass
-	public static void tearDown() throws Exception {		
-			
-			//Gather metrics, report results and terminate automation 
-			Log.terminate();
+	public static void tearDown() {		
+		
+		//Gather metrics, report results and terminate automation 
+		Log.terminate();
 	}
-
 }
-
-
-
-
-
-
-

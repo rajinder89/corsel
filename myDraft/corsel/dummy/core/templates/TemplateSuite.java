@@ -9,53 +9,43 @@ import dummy.core.libs.Log;
 import dummy.core.libs.Platform;
 
 
-
 /**
- * // TODO: change SUITE file description here
- * Standard ACI Selenium SUITE Template file.
- * For example, This Suite executes all of the scripts in the ACI Online Banking Check Services component
- * <p>
+ * Change SUITE file description here
+ * Standard Selenium SUITE Template file.
+ * For example, This Suite executes all of the scripts in the Google component
  * A SUITE script executes all of the test scripts that you specify in the lcScripts list below
  * 
  */
 public class TemplateSuite {
 	
-	
-	
+		
 	/**
 	 * The SUITE setUp() function initializes the automation for the execution of a SUITE of scripts
-	 * <p>
-	 * 
-	 * 
 	 * @throws Exception if a failure occurs during setup process 
 	 * 
 	 */
 	@BeforeClass
-	public static void setUp() throws Exception {
-	
-		Log.gsScriptName = Thread.currentThread().getStackTrace()[1].getClassName();	//script name is auto-generated via this code so DO NOT modify this item
+	public static void setUp() {
 		
-		// TODO: change script description
+		//Script name is auto-generated via this code so DO NOT modify this item
+		Log.gsScriptName = Thread.currentThread().getStackTrace()[1].getClassName();	
+		
+		// Change script description
 		Log.gsScriptDescription = "Add test description here";		//update test description
-		// TODO: change script author
-		Log.gsScriptAuthor = "Tony Venditti";						//update script author
+		// Change script author
+		Log.gsScriptAuthor = "Automation Tester";					//update script author
 		
+		//Script test area uses the project path info and is auto-generated via this code so DO NOT modify this item
 		Log.gsScriptTestArea = FileIO.getParentPath(Platform.getCurrentProjectPath() + Log.gsScriptName.replace(".",Platform.getFileSeparator()));	
 		
-		//initialize for Suite run
+		//Reads in Automation.properties values, Logs script header information, initializes script metrics for Suite run
 		Log.initializeSuiteStats();	
 	}
 	
-	
-
-	
-	
-
-	
+		
 	/**
 	 * This SUITE script executes all of the test scripts in the lcScripts list defined below
 	 * A SUITE script is a special script that contains a collection of other, usually related, scripts to execute.
-	 * <P>
 	 * 
 	 */
 	@Test
@@ -68,8 +58,7 @@ public class TemplateSuite {
 				dummy.googly.scripts.GoogleAbout.class,	//Example 1st script name with ".class" extension to run in suite
 				dummy.googly.scripts.GoogleSearch.class		//Example 2nd script name with ".class" extension to run in suite
 		};
-		
-		
+			
 		
 		//SUITE execution code - runs scripts in list above
 		for (int x =0;x< lcScripts.length;x++){
@@ -80,34 +69,17 @@ public class TemplateSuite {
  				Log.errorHandler("Error occurred during execution of script: " + lcScripts[x].toString(),e);
  			}
  		}
-		
-		
 					
 	}
 	
-	
-	
-	
 	/**
 	 * This function terminates the SUITE, calculates the SUITE metrics and reports SUITE results
-	 * <P>
-	 * @throws Exception if an error occurs during the termination portion of the script
-	 * 
 	 */
 	@AfterClass
-	public static void tearDown() throws Exception {
-		
-		
-			//Gather SUITE metrics and terminate automation 
-			Log.logSuiteStats();
-			
+	public static void tearDown() {
+				
+		//Gather SUITE metrics and terminate automation 
+		Log.logSuiteStats();
 	}
 
 }
-
-
-
-
-
-
-

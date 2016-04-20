@@ -23,7 +23,6 @@ import java.util.StringTokenizer;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-
 /**
  * @Class: FileIO 
  * @Description: The FileIO class contains general File IO functions
@@ -45,8 +44,7 @@ public class FileIO
 	 * @Parameter: filename = path & filename of file or directory to delete
 	 */
     
-	public static void deleteFile(String filename)
-	{
+	public static void deleteFile(String filename) {
 		try
 		{
 			// Create a File object to represent the filename
@@ -102,8 +100,6 @@ public class FileIO
 			return;
 		}
 	}
-
-	
        
 	/**
 	 * Creates specified directories <p>
@@ -113,8 +109,7 @@ public class FileIO
 	 * @return boolean true if directory was created false if it was not
 	 */
     
-	public static boolean makeDirs(String sDirName)
-	{
+	public static boolean makeDirs(String sDirName) {
 		boolean b = false;
 
 		// Create a File object to represent the filename
@@ -142,24 +137,17 @@ public class FileIO
 
 	}
 
-
        
 	/**
 	 * Copies all files under source folder to destination folder. If destination folder does
 	 * not exist, it will be created.
-	 * @param srcDir 
-	 * @param dstDir 
-	 *
-	 * @Parameter: srcDir source
-	 * @Parameter: dstDir destination
-	 *
+	 * @param srcDir  source
+	 * @param dstDir  destination
 	 * @return true if success, false otherwise
-	 */
-       
+	 */       
 	public static boolean copyDir(String srcDir, String dstDir) {
 		return copyDir(new File(srcDir), new File(dstDir));
 	}
-
 	
 	public static boolean copyDir(File srcDir, File dstDir) {
 		if (dstDir.getAbsolutePath().indexOf(srcDir.getAbsolutePath())==0)
@@ -183,12 +171,8 @@ public class FileIO
        
 	/**
 	 * Copies one file to another without any checkings.
-	 * @param fileIn 
-	 * @param fileOut 
-	 *
-	 * @Parameter: fileIn  source
-	 * @Parameter: fileOut destination
-	 *
+	 * @param fileIn source
+	 * @param fileOut destination
 	 * @return true if operation was successful, false otherwise
 	 */
        
@@ -198,12 +182,8 @@ public class FileIO
 	
 	/**
 	 * Copies one file to another without any checkings.
-	 * @param fileIn 
-	 * @param fileOut 
-	 *
-	 * @Parameter: fileIn  source
-	 * @Parameter: fileOut destination
-	 *
+	 * @param fileIn source
+	 * @param fileOut destination
 	 * @return true if operation was successful, false otherwise
 	 */
 	public static boolean copyFile(File fileIn, File fileOut) {
@@ -213,14 +193,9 @@ public class FileIO
 	
 	/**
 	 * Copies one file to another without any checkings.
-	 * @param fileIn 
-	 * @param fileOut 
-	 * @param bufsize 
-	 *
-	 * @Parameter: fileIn  source
-	 * @Parameter: fileOut destination
-	 * @Parameter: bufsize buffer size
-	 *
+	 * @param fileIn source
+	 * @param fileOut destination
+	 * @param bufsize buffer size
 	 * @return true if operation was successful, false otherwise
 	 */
 	public static boolean copyFile(String fileIn, String fileOut, int bufsize) {
@@ -229,14 +204,9 @@ public class FileIO
 
 	/**
 	 * Copies one file to another without any checkings.
-	 * @param fileIn 
-	 * @param fileOut 
-	 * @param bufsize 
-	 *
-	 * @Parameter: fileIn  source
-	 * @Parameter: fileOut destination
-	 * @Parameter: bufsize buffer size
-	 *
+	 * @param fileIn source
+	 * @param fileOut destination
+	 * @param bufsize buffer size
 	 * @return true if operation was successful, false otherwise
 	 */
 	public static boolean copyFile(File fileIn, File fileOut, int bufsize) {
@@ -276,21 +246,14 @@ public class FileIO
 		return result;
 	}
 
-	
-       
+	       
 	/**
 	 * Reads from input and writes read data to the output, until the stream ends.
 	 * @param in 
 	 * @param out 
 	 * @param bufSizeHint 
-	 *
-	 * @Parameter: in
-	 * @Parameter: out
-	 * @Parameter: bufSizeHint
-	 *
 	 * @throws IOException
-	 */
-       
+	 */       
 	public static void copyPipe(InputStream in, OutputStream out, int bufSizeHint) throws IOException {
 		int read = -1;
 		byte[] buf = new byte[bufSizeHint];
@@ -299,76 +262,13 @@ public class FileIO
 		}
 		out.flush();
 	}
-
-
-       
-	/**
-	 * Unpacks a zip file to the target directory.
-	 * @param sZipFile 
-	 * @param sDestDir 
-	 *
-	 * @Parameter: zipFile zip file
-	 * @Parameter: destDir destination directory
-	 *
-	 * @throws IOException
-	 */
-       
-	public static void unzip(String sZipFile, String sDestDir) throws IOException {
-		unzip(new File(sZipFile), new File(sDestDir));
-	
-	}
-	
-	
-	
-	public static void unzip(File zipFile, File destDir) throws IOException {
-		ZipFile zip = new ZipFile(zipFile);
-		Enumeration<?> en = zip.entries();
-		int bufSize = 8196;
-
-		while (en.hasMoreElements()) {
-			ZipEntry entry = (ZipEntry) en.nextElement();
-			File file = (destDir != null) ? new File(destDir, entry.getName()) : new File(entry.getName());
-			if (entry.isDirectory()) {
-				if (!file.mkdirs()) {
-					if (file.isDirectory() == false) {
-						throw new IOException("Error creating directory: " + file);
-					}
-				}
-			} else {
-				File parent = file.getParentFile();
-				if (parent != null && !parent.exists()) {
-					if (!parent.mkdirs()) {
-						if (file.isDirectory() == false) {
-							throw new IOException("Error creating directory: " + parent);
-						}
-					}
-				}
-
-				InputStream in = zip.getInputStream(entry);
-				try {
-					OutputStream out = new BufferedOutputStream(new FileOutputStream(file), bufSize);
-					try {
-						copyPipe(in, out, bufSize);
-					} finally {
-						out.close();
-					}
-				} finally {
-					in.close();
-					zip.close();
-				}
-			}
-		}
-	}
-	
+      	
 	
 	/**
 	 * Writes information to a temporary file on disk.
 	 * @param sFilename 
 	 * @param sKey 
 	 * @param sValue 
-	 * @Parameter: String sFilename
-	 * @Parameter: String sKey
-	 * @Parameter: String sValue
 	 */
 	public static void setTempVarToDisk(String sFilename, String sKey, String sValue)
 	{
@@ -390,20 +290,13 @@ public class FileIO
 	}
 	}
 
-	
-	
-	
-	
 	/**
 	* Removes specified file extension from a given file name or path name
-	 * @param sFile 
-	 * @param sExt 
-	* @Parameter: - String sFile - file name or path i.e. c:\\temp\\myfle.java
-	* @Parameter: - String sExt - extension to be removed i.e. ".java"
+	* @param: - String sFile - file name or path i.e. c:\\temp\\myfle.java
+	* @param: - String sExt - extension to be removed i.e. ".java"
 	* @return  file name string without extension i.e. "c:\\temp\\myfile"
 	*/
-	public static String removeFileExtension(String sFile, String sExt)
-	{
+	public static String removeFileExtension(String sFile, String sExt) {
 		String sOut = "";
 		sOut = Strings.replace(sFile,sExt,"");
 		return sOut;
@@ -1241,8 +1134,7 @@ s	*/
      *
      * @return The path with the first part stripped off.
      */
-    public static String stripTopParent(String path)
-    {
+    public static String stripTopParent(String path) {
         if (path.length() <= 1)
         {
             return "";
@@ -1261,11 +1153,8 @@ s	*/
      * Adds a leading slash, if necessary, to a path name, and removes any
      * multiple  consecutive slashes "///" if necessary.
      * @param path 
-     * @return 
-     *
      */
-    public static String normalizePath(String path)
-    {
+    public static String normalizePath(String path) {
         if (!path.startsWith("/"))
         {
             path = "/" + path;
@@ -1281,10 +1170,7 @@ s	*/
 
     /**
      * Deletes specified directories
-     * <p>
-     * 
-     * @Parameter: sDirName =
-     *            path & directory name to create. example -
+     * @Parameter: sDirName =  path & directory name to create. example -
      *            MakeDir("c:\\First\\Second\\Third"); this will create all
      *            three directories nested within the parent directory
      * @param sDirName 

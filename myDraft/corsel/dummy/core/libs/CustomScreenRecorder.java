@@ -38,28 +38,9 @@ public class CustomScreenRecorder extends ScreenRecorder {
                 movieFolder.mkdirs();
           } else if (!movieFolder.isDirectory()) {
                 throw new IOException("\"" + movieFolder + "\" is not a directory.");
-          }
-                            
-//        return new File(movieFolder, VideoName + "-" + DateTime.getFormattedDateTime(new Date().getTime(), "MMddHHmmssSSS") + "."
-//                  + Registry.getInstance().getExtension(fileFormat));
-//  
+          }                            
+//        return new File(movieFolder, VideoName + "-" + DateTime.getFormattedDateTime(new Date().getTime(), "MMddHHmmssSSS") + "." + Registry.getInstance().getExtension(fileFormat));  
           return new File(movieFolder, VideoName + "-" + DateTime.getFormattedDateTime(new Date().getTime(), "MMddHHmmssSSS") + Log.gsAutomationAutoResultVideoSuffix);
-    
-          
-    }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+    }   
     
  }
